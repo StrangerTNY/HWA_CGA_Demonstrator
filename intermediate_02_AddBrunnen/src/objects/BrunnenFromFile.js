@@ -13,7 +13,7 @@ export default class BrunnenFromFile extends THREE.Group {
   }
 
   load(thisBrunnen){
-    this.gltfLoader.load('src/models/Brunnen_2.gltf', function (gltf){
+    this.gltfLoader.load('../../models/Brunnen_2.gltf', function (gltf){
 
       gltf.scene.traverse(function (child){
         if(child.isMesh){

@@ -22,7 +22,7 @@ export default class TelevisionFromFile extends THREE.Group {
 
   load(thisTelevision) {
 
-    this.gltfLoader.load('src/models/television.gltf', function (gltf) {
+    this.gltfLoader.load('../../models/television.gltf', function (gltf) {
       gltf.scene.traverse(function (child) {
         if (child.isMesh) {
           child.parentTelevision = thisTelevision;

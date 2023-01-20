@@ -42,11 +42,11 @@ function main() {
   brunnen.position.set(-50,20,0);
   window.scene.add(brunnen);
 
-  /*const brunnenFromFile = new BrunnenFromFile();
+  const brunnenFromFile = new BrunnenFromFile();
   brunnenFromFile.position.set(50,10,0);
   brunnenFromFile.rotation.set(0, THREE.MathUtils.degToRad(120), 0);
   brunnenFromFile.addPhysics();
-  window.scene.add(brunnenFromFile);*/
+  window.scene.add(brunnenFromFile);
 
   /*const television = new Television();
   television.position.set(-30, 55.8, 0);
