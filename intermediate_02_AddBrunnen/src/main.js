@@ -40,13 +40,14 @@ function main() {
 
   const brunnen = new Brunnen();
   brunnen.position.set(-50,20,0);
+  brunnen.rotation.set(0, THREE.MathUtils.degToRad(-23), 0);
   window.scene.add(brunnen);
 
-  const brunnenFromFile = new BrunnenFromFile();
-  brunnenFromFile.position.set(50,10,0);
-  brunnenFromFile.rotation.set(0, THREE.MathUtils.degToRad(120), 0);
-  brunnenFromFile.addPhysics();
-  window.scene.add(brunnenFromFile);
+  //const brunnenFromFile = new BrunnenFromFile();
+  //brunnenFromFile.position.set(50,10,0);
+  //brunnenFromFile.rotation.set(0, THREE.MathUtils.degToRad(-90), 0);
+  //brunnenFromFile.addPhysics();
+  //window.scene.add(brunnenFromFile);
 
   /*const television = new Television();
   television.position.set(-30, 55.8, 0);

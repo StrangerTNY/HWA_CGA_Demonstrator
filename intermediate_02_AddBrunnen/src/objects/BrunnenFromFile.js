@@ -29,11 +29,11 @@ export default class BrunnenFromFile extends THREE.Group {
 
   }
 
-  addPhysics() {
+  /*addPhysics() {
     if (this.loadingDone === false) {
       window.setTimeout(this.addPhysics.bind(this), 100);
     } else {
       window.physics.addCylinder(this, 100, 30,30,35,8,0,10);
     }
-  }
+  }*/
 }
