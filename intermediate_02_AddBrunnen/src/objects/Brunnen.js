@@ -191,7 +191,31 @@ export default class Brunnen extends THREE.Group {
     seil12.position.set(10,0.3,-3);
     this.add(seil12);
 
+    const eimerSeilGeometry = new THREE.CylinderGeometry(1.2,1.2,37);
+    const eimerSeil = new THREE.Mesh(eimerSeilGeometry, seilMaterial);
+    eimerSeil.position.set(0,65,0);
+    this.add(eimerSeil);
 
+    //Eimer
+    //---------------------------------------
+
+    const eimerGeometry = new THREE.CylinderGeometry(10,10,15);
+    const eimer = new THREE.Mesh(eimerGeometry, brunnenMaterial);
+    eimer.position.set(0,35,0);
+    //this.add(eimer);
+
+    const eimerCavityGeometry = new THREE.CylinderGeometry(10,10,14);
+    eimerCavityGeometry.translate(0,1,0);
+    eimerCavityGeometry.scale(0.8,1,0.8);
+    const eimerCavity = new THREE.Mesh(eimerCavityGeometry, brunnenMaterial);
+
+    const eimerCSG = CSG.fromMesh(eimer);
+    const eimerCavityCSG = CSG.fromMesh(eimerCavity);
+    const hollowEimer = CSG.toMesh(eimerCSG.subtract(eimerCavityCSG), eimer.matrix, eimer.material);
+    hollowEimer.castShadow = true;
+    hollowEimer.position.set(0,35,0);
+
+    this.add(hollowEimer);
   }
 
 
