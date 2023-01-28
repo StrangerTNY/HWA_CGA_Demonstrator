@@ -20,6 +20,7 @@ export default class Brunnen extends THREE.Group {
     const brunnenMaterial = new THREE.MeshLambertMaterial({color: 0x561e0b});
     const brunnenGeometry = new THREE.CylinderGeometry( 30, 30, 43, 8 );
     const brunnen = new THREE.Mesh(brunnenGeometry, brunnenMaterial);
+    brunnen.rotation.set(0,THREE.MathUtils.degToRad(45),0);
     brunnen.castShadow = true;
     //this.add(brunnen);b
 
@@ -32,6 +33,7 @@ export default class Brunnen extends THREE.Group {
     const cavityCSG = CSG.fromMesh(cavity);
     const hollowBrunnen = CSG.toMesh(brunnenCSG.subtract(cavityCSG), brunnen.matrix, brunnen.material);
     hollowBrunnen.castShadow = true;
+    hollowBrunnen.rotation.set(0,THREE.MathUtils.degToRad(23),0);
     this.add(hollowBrunnen);
 
     // Brunnen Rand
@@ -42,41 +44,14 @@ export default class Brunnen extends THREE.Group {
     const randCSG = CSG.fromMesh(rand);
     const hollowRand = CSG.toMesh(randCSG.subtract(cavityCSG), rand.matrix, rand.material);
     hollowRand.castShadow = true;
-    this.add(hollowRand);
-
-
-    //Brunnen Gerüst
-    //----------------------
-    const geruestGeometry = new THREE.BoxGeometry(2,100,7);
-    geruestGeometry.translate(0,53,0);
-    const geruest1 = new THREE.Mesh(geruestGeometry, brunnenMaterial);
-    geruest1.position.set(-30,0,12.5);
-    geruest1.rotation.set(0, THREE.MathUtils.degToRad(23), 0);
-    this.add(geruest1);
-
-    const geruest2 = geruest1.clone();
-    geruest2.position.set(30,0,-12.5);
-    geruest2.rotation.set(0, THREE.MathUtils.degToRad(23), 0);
-    this.add(geruest2);
-
-    const geruestAddonGeometry = new THREE.BoxGeometry(2,18,7);
-    geruestAddonGeometry.translate(0,70,0);
-    const geruestAddon1 = new THREE.Mesh(geruestAddonGeometry, brunnenMaterial);
-    geruestAddon1.position.set(-31.5,0,13.2);
-    geruestAddon1.rotation.set(0, THREE.MathUtils.degToRad(23),0);
-    this.add(geruestAddon1);
-
-    const geruestAddon2 = geruestAddon1.clone();
-    geruestAddon2.position.set(31.7,0,-13.5);
-    geruestAddon2.rotation.set(0,THREE.MathUtils.degToRad(23),0);
-    this.add(geruestAddon2);
+    hollowBrunnen.add(hollowRand);
 
     //Brunnen Dach
     //----------------------------------
     const dachGeruestGeometry = new THREE.BoxGeometry(70,5,70);
     dachGeruestGeometry.translate(0,103,0);
     const dachGeruest = new THREE.Mesh(dachGeruestGeometry, brunnenMaterial);
-    dachGeruest.rotation.set(0,THREE.MathUtils.degToRad(23),0);
+    //dachGeruest.rotation.set(0,THREE.MathUtils.degToRad(23),0);
     //this.add(dachGeruest);
 
     const dachGeruestCavityGeometry = new THREE.BoxGeometry(70,5,70);
@@ -87,15 +62,14 @@ export default class Brunnen extends THREE.Group {
     const dachGeruestCSG = CSG.fromMesh(dachGeruest);
     const dachGeruestCavityCSG = CSG.fromMesh(dachGeruestCavity);
     const hollowDachGeruest = CSG.toMesh(dachGeruestCSG.subtract(dachGeruestCavityCSG), dachGeruest.matrix, dachGeruest.material);
-    hollowDachGeruest.rotation.set(0,THREE.MathUtils.degToRad(23),0);
+    //hollowDachGeruest.rotation.set(0,THREE.MathUtils.degToRad(23),0);
     hollowDachGeruest.castShadow = true;
     this.add(hollowDachGeruest);
-
 
     const dachGeometry = new THREE.ConeGeometry(55, 30, 4 , 1);
     dachGeometry.translate(0,120,0);
     const dach = new THREE.Mesh(dachGeometry, brunnenMaterial);
-    dach.rotation.set(0,THREE.MathUtils.degToRad(-23),0);
+    dach.rotation.set(0,THREE.MathUtils.degToRad(45),0);
     this.add(dach);
 
     const dachCavityGeometry = new THREE.ConeGeometry(55,30,4,1);
@@ -106,48 +80,63 @@ export default class Brunnen extends THREE.Group {
     const dachCSG = CSG.fromMesh(dach);
     const dachCavityCSG = CSG.fromMesh(dachCavity);
     const hollowDach = CSG.toMesh(dachCSG.subtract(dachCavityCSG), dach.matrix, dach.material);
-    hollowDach.rotation.set(0,THREE.MathUtils.degToRad(-23),0);
+    //hollowDach.rotation.set(0,THREE.MathUtils.degToRad(-23),0);
     hollowDach.castShadow = true;
     //this.add(hollowDach);
 
-    //Brunnen Mechanik
+
+    //Brunnen Gerüst
+    //----------------------
+    const geruestGeometry = new THREE.BoxGeometry(2,100,7);
+    geruestGeometry.translate(0,53,0);
+    const geruest1 = new THREE.Mesh(geruestGeometry, brunnenMaterial);
+    geruest1.position.set(-33,0,0);
+    //geruest1.rotation.set(0, THREE.MathUtils.degToRad(23), 0);
+    hollowDachGeruest.add(geruest1);
+
+    const geruest2 = geruest1.clone();
+    geruest2.position.set(33,0,0);
+    //geruest2.rotation.set(0, THREE.MathUtils.degToRad(23), 0);
+    hollowDachGeruest.add(geruest2);
+
+    const geruestAddonGeometry = new THREE.BoxGeometry(2,18,7);
+    geruestAddonGeometry.translate(0,70,0);
+    const geruestAddon1 = new THREE.Mesh(geruestAddonGeometry, brunnenMaterial);
+    geruestAddon1.position.set(-2,0,0);
+    //geruestAddon1.rotation.set(0, THREE.MathUtils.degToRad(23),0);
+    geruest1.add(geruestAddon1);
+
+    const geruestAddon2 = geruestAddon1.clone();
+    geruestAddon2.position.set(2,0,0);
+    //geruestAddon2.rotation.set(0,THREE.MathUtils.degToRad(23),0);
+    geruest2.add(geruestAddon2);
+
+
+    //Brunnen Rolle
     //---------------------------------------------------
-    const stabMaterial = new THREE.MeshLambertMaterial({color: 0x684222});
 
     const rolleMaterial = new THREE.MeshLambertMaterial({color: 0x1e1500});
     const rolleGeometry = new THREE.CylinderGeometry(7,7,57);
-    rolleGeometry.translate(0,0,-75);
+    //rolleGeometry.translate(0,0,-75);
     const rolle = new THREE.Mesh(rolleGeometry, rolleMaterial);
-    rolle.rotation.set(THREE.MathUtils.degToRad(90),0,THREE.MathUtils.degToRad(68));
+    rolle.rotation.set(0,0,THREE.MathUtils.degToRad(90));
+    rolle.position.set(0,75,0);
     this.add(rolle);
 
-    const griff1Geometry = new THREE.BoxGeometry(1,25,4);
-    //griff1Geometry.translate(0,68,0);
-    const griff1 = new THREE.Mesh(griff1Geometry, rolleMaterial);
-    // nur X Achse bei Umdrehen anpassen sonst sieht der Griff wonky aus
-    griff1.rotation.set(THREE.MathUtils.degToRad(-23), THREE.MathUtils.degToRad(23),THREE.MathUtils.degToRad(7));
-    griff1.position.set(-40,68,19);
-    //this.add(griff1);
-
-    const griff2Geometry = new THREE.CylinderGeometry(1,1,10);
-    const griff2 = new THREE.Mesh(griff2Geometry, stabMaterial);
-    griff2.rotation.set(THREE.MathUtils.degToRad(90),THREE.MathUtils.degToRad(0),THREE.MathUtils.degToRad(68));
-    griff2.position.set(-43,60,24);
-    //this.add(griff2);
-
-    //const stabMaterial = new THREE.MeshLambertMaterial({color: 0x684222});
-    const stabGeometry = new THREE.CylinderGeometry(1,1,90);
-    const stab = new THREE.Mesh(stabGeometry,stabMaterial).add(griff1,griff2);
-    stab.rotation.set(0,0,THREE.MathUtils.degToRad(90));
+    //Griff
+    //------------------------------------------------------
+    const stabMaterial = new THREE.MeshLambertMaterial({color: 0x684222});
+    const stabGeometry = new THREE.CylinderGeometry(1,1,90,8);
+    const stab = new THREE.Mesh(stabGeometry, stabMaterial);
+    //stab.rotation.set(THREE.MathUtils.degToRad(90),0,THREE.MathUtils.degToRad(67));
+    stab.position.set(0,75,0);
     stab.name = 'griff';
-    stab.children[1].name = 'griff';
-    stab.children[0].name = 'griff';
     this.add(stab);
 
     //Griff Animation
     //---------------------------------------------
     stab.tweenAnimationUp = new TWEEN.Tween(stab.rotation).to(new THREE.Vector3(
-        stab.rotation.x - THREE.MathUtils.degToRad(80) ,
+        stab.rotation.x - THREE.MathUtils.degToRad(180) ,
         stab.rotation.y  ,
         stab.rotation.z ),
         2000).easing(TWEEN.Easing.Quadratic.Out).onComplete(this.updateFunctionalState.bind(this));

@@ -40,7 +40,7 @@ function main() {
 
   const brunnen = new Brunnen();
   brunnen.position.set(-50,20,0);
-  brunnen.rotation.set(0, THREE.MathUtils.degToRad(-23), 0);
+  //brunnen.rotation.set(0, THREE.MathUtils.degToRad(-23), 0);
   console.log(brunnen.children[11]);
   window.scene.add(brunnen);
 
