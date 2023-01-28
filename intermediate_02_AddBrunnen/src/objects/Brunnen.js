@@ -1,11 +1,15 @@
 import * as THREE from 'three';
 import CSG from 'csg';
+import * as TWEEN from 'tween';
+
+import {Animation, AnimationType, AnimationAxis} from '../animation/Animation.js';
 
 export default class Brunnen extends THREE.Group {
 
   constructor() {
     super();
 
+    this.animations = [];
     this.addParts();
   }
 
@@ -108,13 +112,7 @@ export default class Brunnen extends THREE.Group {
 
     //Brunnen Mechanik
     //---------------------------------------------------
-
     const stabMaterial = new THREE.MeshLambertMaterial({color: 0x684222});
-    const stabGeometry = new THREE.CylinderGeometry(1,1,90);
-    stabGeometry.translate(0,0,-75);
-    const stab = new THREE.Mesh(stabGeometry,stabMaterial);
-    stab.rotation.set(THREE.MathUtils.degToRad(90),THREE.MathUtils.degToRad(0),THREE.MathUtils.degToRad(68));
-    this.add(stab);
 
     const rolleMaterial = new THREE.MeshLambertMaterial({color: 0x1e1500});
     const rolleGeometry = new THREE.CylinderGeometry(7,7,57);
@@ -129,13 +127,36 @@ export default class Brunnen extends THREE.Group {
     // nur X Achse bei Umdrehen anpassen sonst sieht der Griff wonky aus
     griff1.rotation.set(THREE.MathUtils.degToRad(-23), THREE.MathUtils.degToRad(23),THREE.MathUtils.degToRad(7));
     griff1.position.set(-40,68,19);
-    this.add(griff1);
+    //this.add(griff1);
 
     const griff2Geometry = new THREE.CylinderGeometry(1,1,10);
     const griff2 = new THREE.Mesh(griff2Geometry, stabMaterial);
     griff2.rotation.set(THREE.MathUtils.degToRad(90),THREE.MathUtils.degToRad(0),THREE.MathUtils.degToRad(68));
     griff2.position.set(-43,60,24);
-    this.add(griff2);
+    //this.add(griff2);
+
+    //const stabMaterial = new THREE.MeshLambertMaterial({color: 0x684222});
+    const stabGeometry = new THREE.CylinderGeometry(1,1,90);
+    const stab = new THREE.Mesh(stabGeometry,stabMaterial).add(griff1,griff2);
+    stab.rotation.set(0,0,THREE.MathUtils.degToRad(90));
+    stab.name = 'griff';
+    stab.children[1].name = 'griff';
+    stab.children[0].name = 'griff';
+    this.add(stab);
+
+    //Griff Animation
+    //---------------------------------------------
+    stab.tweenAnimationUp = new TWEEN.Tween(stab.rotation).to(new THREE.Vector3(
+        stab.rotation.x - THREE.MathUtils.degToRad(80) ,
+        stab.rotation.y  ,
+        stab.rotation.z ),
+        2000).easing(TWEEN.Easing.Quadratic.Out).onComplete(this.updateFunctionalState.bind(this));
+    stab.tweenAnimationDown = new TWEEN.Tween(stab.rotation).to(new THREE.Vector3(
+            stab.rotation.x ,
+            stab.rotation.y,
+            stab.rotation.z),
+        2000).easing(TWEEN.Easing.Quadratic.Out).onComplete(this.updateFunctionalState.bind(this));
+    stab.up = false;
 
 
     //Seil
@@ -218,6 +239,8 @@ export default class Brunnen extends THREE.Group {
     this.add(hollowEimer);
   }
 
-
+  updateFunctionalState(){
+    const griffRotation = THREE.MathUtils.radToDeg(this.children[11].rotation.x) === 360;
+  }
 
 }
