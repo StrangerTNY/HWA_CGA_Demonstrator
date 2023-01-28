@@ -12,7 +12,7 @@ export default class TableFromFile extends THREE.Group {
 
   load(thisTable) {
 
-    this.gltfLoader.load('src/models/table.gltf', function (gltf) {
+    this.gltfLoader.load('../../models/table.gltf', function (gltf) {
 
       gltf.scene.traverse(function (child) {
 

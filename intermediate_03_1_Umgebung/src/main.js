@@ -28,6 +28,17 @@ function main() {
   window.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
   window.camera.position.set(-100, 300, 300);
 
+  // Skybox
+  var skybox = new THREE.CubeTextureLoader().load([
+    'src/images/SkySkyBoxAnime/px.png',
+    'src/images/SkySkyBoxAnime/nx.png',
+    'src/images/SkySkyBoxAnime/py.png',
+    'src/images/SkySkyBoxAnime/ny.png',
+    'src/images/SkySkyBoxAnime/pz.png',
+    'src/images/SkySkyBoxAnime/nz.png',
+  ]);
+  window.scene.background = skybox;
+
   window.renderer = new THREE.WebGLRenderer({antialias: true});
   window.renderer.setSize(window.innerWidth, window.innerHeight);
   window.renderer.setClearColor(0xBCF8FD);
@@ -89,12 +100,12 @@ function main() {
   window.scene.add(mesh);*/
 
   const ambientLight = new THREE.AmbientLight(0xffffff);
-  ambientLight.intensity = 0.7;
+  ambientLight.intensity = 0.8;
   window.scene.add(ambientLight);
 
   const spotLight = new THREE.SpotLight(0xffffff);
-  spotLight.position.set(100, 400, 200);
-  spotLight.intensity = 0.8;
+  spotLight.position.set(100, 500, 200);
+  spotLight.intensity = 1;
   spotLight.target = ground;
   spotLight.angle = THREE.MathUtils.degToRad(30);
   spotLight.penumbra = 1.0;
@@ -111,9 +122,9 @@ function main() {
   document.body.appendChild(stats.dom);
 
   const gui = new DATGUI.GUI();
-  gui.add(spotLight.position, 'x', 0, 200);
-  gui.add(spotLight.position, 'y', 0, 200);
-  gui.add(spotLight.position, 'z', 0, 200);
+  gui.add(spotLight.position, 'x', 0, 500);
+  gui.add(spotLight.position, 'y', 0, 500);
+  gui.add(spotLight.position, 'z', 0, 500);
 
   const orbitControls = new CONTROLS.OrbitControls(window.camera, window.renderer.domElement);
   orbitControls.target = new THREE.Vector3(0, 0, 0);

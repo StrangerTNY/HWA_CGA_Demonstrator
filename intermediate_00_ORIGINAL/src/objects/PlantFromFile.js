@@ -12,7 +12,7 @@ export default class PlantFromFile extends THREE.Group {
 
   load(thisPlant) {
 
-    this.gltfLoader.load('src/models/plant.gltf', function (gltf) {
+    this.gltfLoader.load('../../models/plant.gltf', function (gltf) {
 
       gltf.scene.traverse(function (child) {
 
