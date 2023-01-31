@@ -15,6 +15,13 @@ export default class Brunnen extends THREE.Group {
 
   addParts() {
 
+    const metalMaterial = new THREE.MeshStandardMaterial({
+      color: 0xe7e7e7,
+      flatShading: false,
+      roughness: 0.0,
+      metalness: 0.3
+    });
+
     // Brunnen Becken
     // -------------
     const brunnenMaterial = new THREE.MeshLambertMaterial({color: 0x561e0b});
@@ -22,7 +29,7 @@ export default class Brunnen extends THREE.Group {
     const brunnen = new THREE.Mesh(brunnenGeometry, brunnenMaterial);
     brunnen.rotation.set(0, THREE.MathUtils.degToRad(45), 0);
     brunnen.castShadow = true;
-    //this.add(brunnen);b
+    //this.add(brunnen);
 
     const cavityGeometry = new THREE.CylinderGeometry(30, 30, 50, 8);
     cavityGeometry.scale(0.9, 1, 0.9);
@@ -111,6 +118,62 @@ export default class Brunnen extends THREE.Group {
     //geruestAddon2.rotation.set(0,THREE.MathUtils.degToRad(23),0);
     geruest2.add(geruestAddon2);
 
+    //Eimer
+    //---------------------------------------
+
+    const eimerGeometry = new THREE.CylinderGeometry(10, 10, 15);
+    const eimer = new THREE.Mesh(eimerGeometry, brunnenMaterial);
+    eimer.position.set(0, 35, 0);
+    //this.add(eimer);
+
+    const eimerCavityGeometry = new THREE.CylinderGeometry(10, 10, 14);
+    eimerCavityGeometry.translate(0, 1, 0);
+    eimerCavityGeometry.scale(0.8, 1, 0.8);
+    const eimerCavity = new THREE.Mesh(eimerCavityGeometry, brunnenMaterial);
+
+    const eimerCSG = CSG.fromMesh(eimer);
+    const eimerCavityCSG = CSG.fromMesh(eimerCavity);
+    const hollowEimer = CSG.toMesh(eimerCSG.subtract(eimerCavityCSG), eimer.matrix, eimer.material);
+    hollowEimer.castShadow = true;
+    hollowEimer.position.set(0, 30, 0);
+
+    this.add(hollowEimer);
+
+    const eimerGriffProfile = new THREE.Shape().absellipse(0, 0, 0.2, 0.2,
+        0, THREE.MathUtils.degToRad(360));
+    const eimerGriffSpline = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-9, 0, 0),
+      new THREE.Vector3(-7, 1, 0),
+      new THREE.Vector3(-3, 7, 0),
+      new THREE.Vector3(3, 7, 0),
+      new THREE.Vector3(7, 1, 0),
+      new THREE.Vector3(9, 0, 0)
+    ]);
+    eimerGriffSpline.curveType = 'catmullrom';
+    eimerGriffSpline.tension = 0.0;
+    const extrudeSettings = {
+      steps: 200,
+      curveSegments: 100,
+      extrudePath: eimerGriffSpline
+    };
+    const eimerGriffGeometry = new THREE.ExtrudeGeometry(eimerGriffProfile, extrudeSettings);
+    const eimerGriff = new THREE.Mesh(eimerGriffGeometry, metalMaterial);
+    eimerGriff.position.set(0, 7, 0);
+    eimerGriff.castShadow = true;
+    hollowEimer.add(eimerGriff);
+
+    hollowEimer.name = 'eimer';
+    hollowEimer.children[0].name = 'eimer';
+    //Eimer Animation
+    //-------------------------------------------------------
+    const eimerAnimation = new Animation(hollowEimer, AnimationType.TRANSLATION, AnimationAxis.Y);
+    eimerAnimation.setAmount(-18);
+    eimerAnimation.setSpeed(9);
+    eimerAnimation.onComplete(this.updateFunctionalState.bind(this));
+    hollowEimer.linearAnimation = eimerAnimation;
+    this.animations.push(eimerAnimation);
+
+
 
     //Brunnen Rolle
     //---------------------------------------------------
@@ -152,88 +215,69 @@ export default class Brunnen extends THREE.Group {
     this.animations.push(griffAnimation);
 
 
+
     //Seil
     //--------------------------------------------------
     const seilMaterial = new THREE.MeshLambertMaterial({color: 0x594b37});
-    const seilGeometry = new THREE.TorusGeometry(7.5, 1.2, 16, 16);
-    seilGeometry.translate(0, 75, 0);
+    const seilGeometry = new THREE.TorusGeometry(8, 1.5, 16, 16);
+    //seilGeometry.translate(0, 75, 0);
     const seil = new THREE.Mesh(seilGeometry, seilMaterial);
-    seil.rotation.set(0, THREE.MathUtils.degToRad(90), 0);
-    this.add(seil);
+    seil.rotation.set(THREE.MathUtils.degToRad(90), THREE.MathUtils.degToRad(0),0 );
+    stab.add(seil);
 
     const seil2 = seil.clone();
-    seil2.position.set(-12, 0, .5);
-    this.add(seil2);
+    seil2.position.set(0, -12, .5);
+    stab.add(seil2);
 
     const seil3 = seil.clone();
-    seil3.position.set(-10, 0.4, 0);
-    this.add(seil3);
+    seil3.position.set(0.4, -10, 0);
+    stab.add(seil3);
 
     const seil4 = seil.clone();
-    seil4.position.set(-8, 0, .5);
-    this.add(seil4);
+    seil4.position.set(0, -8, .5);
+    stab.add(seil4);
 
     const seil5 = seil.clone();
-    seil5.position.set(-5.5, 0, 0);
-    this.add(seil5);
+    seil5.position.set(0, -5.5, 0);
+    stab.add(seil5);
 
     const seil6 = seil.clone();
-    seil6.position.set(-3.2, 0, 0);
-    this.add(seil6);
+    seil6.position.set(0, -3.2, 0);
+    stab.add(seil6);
 
     const seil7 = seil.clone();
-    seil7.position.set(-1, 0, .5);
-    this.add(seil7);
+    seil7.position.set(0, -1, .5);
+    stab.add(seil7);
 
     const seil8 = seil.clone();
-    seil8.position.set(2, 0, -.5);
-    this.add(seil8);
+    seil8.position.set(0, 2, -.5);
+    stab.add(seil8);
 
     const seil9 = seil.clone();
-    seil9.position.set(4, 0, 0);
-    this.add(seil9);
+    seil9.position.set(0,4, 0);
+    stab.add(seil9);
 
     const seil10 = seil.clone();
-    seil10.position.set(6, 0, -.5);
-    this.add(seil10);
+    seil10.position.set(0, 6, -.5);
+    stab.add(seil10);
 
     const seil11 = seil.clone();
-    seil11.position.set(8, 0, 0);
-    this.add(seil11);
+    seil11.position.set(0, 8, 0);
+    stab.add(seil11);
 
     const seil12 = seil.clone();
-    seil12.position.set(10, 0.3, 0);
-    this.add(seil12);
+    seil12.position.set(.3, 10, 0);
+    stab.add(seil12);
 
-    const eimerSeilGeometry = new THREE.CylinderGeometry(1.2, 1.2, 37);
+    const eimerSeilGeometry = new THREE.CylinderGeometry(1.2, 1.2, 40);
     const eimerSeil = new THREE.Mesh(eimerSeilGeometry, seilMaterial);
-    eimerSeil.position.set(0, 65, 0);
-    this.add(eimerSeil);
+    eimerSeil.position.set(0, 33.5, 0);
+    hollowEimer.add(eimerSeil);
 
-    //Eimer
-    //---------------------------------------
-
-    const eimerGeometry = new THREE.CylinderGeometry(10, 10, 15);
-    const eimer = new THREE.Mesh(eimerGeometry, brunnenMaterial);
-    eimer.position.set(0, 35, 0);
-    //this.add(eimer);
-
-    const eimerCavityGeometry = new THREE.CylinderGeometry(10, 10, 14);
-    eimerCavityGeometry.translate(0, 1, 0);
-    eimerCavityGeometry.scale(0.8, 1, 0.8);
-    const eimerCavity = new THREE.Mesh(eimerCavityGeometry, brunnenMaterial);
-
-    const eimerCSG = CSG.fromMesh(eimer);
-    const eimerCavityCSG = CSG.fromMesh(eimerCavity);
-    const hollowEimer = CSG.toMesh(eimerCSG.subtract(eimerCavityCSG), eimer.matrix, eimer.material);
-    hollowEimer.castShadow = true;
-    hollowEimer.position.set(0, 35, 0);
-
-    this.add(hollowEimer);
-  }
+    }
 
   updateFunctionalState() {
-    const griffRotation = THREE.MathUtils.radToDeg(this.children[11].rotation.x) === 360;
+    //const griffRotation = THREE.MathUtils.radToDeg(this.children[5].rotation.x) === 360;
   }
 
 }
