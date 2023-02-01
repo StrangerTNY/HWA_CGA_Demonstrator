@@ -30,7 +30,7 @@ export default class Ground extends THREE.Group {
       if(map === '2' || map === '3'){
         mapArray[map].repeat.set(5,1);
       }else{
-        mapArray[map].repeat.set(4,3);
+        mapArray[map].repeat.set(2,1);
 
       }
       mapArray[map].wrapS = THREE.RepeatWrapping;
@@ -58,7 +58,7 @@ export default class Ground extends THREE.Group {
       new THREE.MeshStandardMaterial({color: 0xFFCFC8, wireframe: false, roughness: 0.7}), //left side
       //new THREE.MeshBasicMaterial({ map: loader.load('src/images/grassTexture.jpeg')}), //top side
       //new THREE.MeshPhongMaterial({ bumpMap: bmap, bumpScale: 1.3, displacementMap: dmap, displacementScale: 5, map:map}),
-      new THREE.MeshStandardMaterial({color: 0xFFFFFF, wireframe: false, roughness: 0.7}),
+      new THREE.MeshStandardMaterial({color: 0xFFFFFF, wireframe: false, roughness: 0.9}),
       new THREE.MeshStandardMaterial({color: 0xFFCFC8, wireframe: false, roughness: 0.7}), //bottom side
       new THREE.MeshStandardMaterial({color: 0xFFCFC8, wireframe: false, roughness: 0.7}), //front side
       new THREE.MeshStandardMaterial({color: 0xFFCFC8, wireframe: false, roughness: 0.7}), //back side
@@ -69,13 +69,13 @@ export default class Ground extends THREE.Group {
     // nur Oberseite von Ground wird texturiert
     groundMaterial[2].map = grassMap;
     groundMaterial[2].normalMap = grassNormalMap;
-    groundMaterial[2].normalScale.set(50,50);
+    groundMaterial[2].normalScale.set(10,10);
     // Seite texturiert
     for (let i in groundMaterial) {
       if(i !== '2'){
         groundMaterial[i].map = dirtMap;
         groundMaterial[i].normalMap = dirtNormalMap;
-        groundMaterial[i].normalScale.set(50,50);
+        groundMaterial[i].normalScale.set(10,10);
       }
     }
 

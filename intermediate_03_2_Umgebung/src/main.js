@@ -19,6 +19,7 @@ import Tree from './objects/Tree.js';
 import {updateAspectRatio} from './eventfunctions/updateAspectRatio.js';
 import {executeRaycast} from './eventfunctions/executeRaycast.js';
 import {keyDownAction, keyUpAction} from './eventfunctions/executeKeyAction.js';
+import Path from "./objects/Path.js";
 
 
 function main() {
@@ -58,32 +59,10 @@ function main() {
   brunnen.position.set(0,0,0);
   window.scene.add(brunnen);*/
 
-/*  const television = new Television();
-  television.position.set(-30, 55.8, 0);
-  television.rotation.set(0, THREE.MathUtils.degToRad(10), 0);
-  television.addPhysics();
-  window.scene.add(television);*/
-
-/*  const televisionFromFile = new TelevisionFromFile();
-  televisionFromFile.position.set(30, 55.8, 0);
-  televisionFromFile.rotation.set(0, THREE.MathUtils.degToRad(-10), 0);
-  televisionFromFile.addPhysics();
-  window.scene.add(televisionFromFile);*/
-
   const tableFromFile = new TableFromFile();
   tableFromFile.position.set(0, 0, 0);
   tableFromFile.addPhysics();
-  window.scene.add(tableFromFile);
-
-/*  const plantFromFile = new PlantFromFile();
-  plantFromFile.position.set(-75, 75, -75);
-  plantFromFile.addPhysics();
-  plantFromFile.addSound();
-  window.scene.add(plantFromFile);*/
-
-/*  const floor = new Floor();
-  floor.position.set(0, 0, 0);
-  window.scene.add(floor);*/
+  //window.scene.add(tableFromFile);
 
   const ground = new Ground();
   ground.position.set(0,-26,0);
@@ -94,16 +73,9 @@ function main() {
   tree.addPhysics();
   window.scene.add(tree);
 
-  /*const grass = new Grass();
-  grass.position.set(-0,0,0);
-  window.scene.add(grass);*/
-
-  /*grass.addPhysics();*/
-  // vergeblicher Versuch mit Instanzen zu arbeiten
-  /*const geometry = new THREE.IcosahedronGeometry();
-  const material = new THREE.MeshPhongMaterial({color: 0x8E2511});
-  const mesh = new THREE.InstancedMesh(geometry,material,100);
-  window.scene.add(mesh);*/
+  const path = new Path();
+  path.position.set(0,0.5,100);
+  window.scene.add(path);
 
   const ambientLight = new THREE.AmbientLight(0xffffff);
   ambientLight.intensity = 0.8;
