@@ -22,6 +22,30 @@ export function executeRaycast(event) {
         firstHit.parent.parent.children[3].linearAnimation.toggleEndPosition();
 
       }
+    }else if(firstHit.name === 'Mechanik_2' || firstHit.name === 'Mechanik_3'){
+      firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
+
+      if(firstHit.parentBrunnen.state.eimerDown){
+        firstHit.parentBrunnen.animations.get('EimerUp').stop();
+        firstHit.parentBrunnen.animations.get('MechanikUp').stop();
+        firstHit.parentBrunnen.animations.get('RopeUp').stop();
+        firstHit.parentBrunnen.animations.get('WaterAction').stop();
+        firstHit.parentBrunnen.animations.get('EimerDown').play();
+        firstHit.parentBrunnen.animations.get('RopeDown').play();
+        firstHit.parentBrunnen.animations.get('MechnikDown').play();
+
+      }else{
+        firstHit.parentBrunnen.animations.get('EimerDown').stop();
+        firstHit.parentBrunnen.animations.get('MechnikDown').stop();
+        firstHit.parentBrunnen.animations.get('RopeDown').stop();
+        firstHit.parentBrunnen.animations.get('EimerUp').play();
+        firstHit.parentBrunnen.animations.get('RopeUp').play();
+        firstHit.parentBrunnen.animations.get('WaterAction').play();
+        firstHit.parentBrunnen.animations.get('MechanikUp').play();
+
+
+      }
+
     }
   }
   /*if (firstHit.name === 'powerKnob' || firstHit.name === 'volumeKnob') {

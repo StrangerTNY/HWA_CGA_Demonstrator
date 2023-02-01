@@ -9,40 +9,77 @@ export default class BrunnenFromFile extends THREE.Group {
     this.loadingDone = false;
     this.animationMixer = null;
     this.animations = new Map();
+    this.state = {
+      eimerDown: false
+    };
     this.load(this);
   }
 
   load(thisBrunnen){
-    this.gltfLoader.load('../../models/Brunnen_2.gltf', function (gltf){
+    this.gltfLoader.load('../../models/Brunnen.gltf', function (gltf){
 
       gltf.scene.traverse(function (child){
         if(child.isMesh){
           child.parentBrunnen = thisBrunnen;
-          console.log(child.name);
+          //console.log(child.name);
         }
-        if (child.name === 'Eimer' || child.name === 'Cylinder011' || child.name === 'Cylinder011_1') {
-          console.log(child.name);
+        if (child.name === 'Brunnen_1' ) {
+          //console.log(child.name);
           child.castShadow = true;
+        }
+        if (child.name === 'Brunnen_2' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Brunnen_3' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Eimer_1' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Eimer_2' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Gerüst' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Gerüst_1' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Dach_1' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Dach_2' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Mechanik_1' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Mechanik_2' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Mechanik_3' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Mechanik_4' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
+        if (child.name === 'Rope' ) {
+          //console.log(child.name);
+          child.castShadow = true;
+        }
 
-        }
-        if (child.name === 'Dach') {
-          console.log(child.name);
-        }
-        if (child.name === 'Water') {
-          console.log(child.name);
-        }
-        if (child.name === 'Mechanik') {
-          console.log(child.name);
-        }
-        if (child.name === 'Rope') {
-          console.log(child.name);
-        }
-        if (child.name === 'Geruest') {
-          console.log(child.name);
-        }
-        if(child.name === 'Geruest' || child.name === 'Rope' || child.name === 'Mechanik' || child.name === 'Dach' || child.name === 'Eimer'){
-          child.castShadow = true;
-        }
 
       });
       thisBrunnen.animationMixer = new THREE.AnimationMixer(gltf.scene);
@@ -52,13 +89,13 @@ export default class BrunnenFromFile extends THREE.Group {
         action.setLoop(THREE.LoopOnce);
         thisBrunnen.animations.set(gltf.animations[i].name, action);
 
-        console.log(gltf.animations[i].name);
+        //console.log(gltf.animations[i].name);
       }
       gltf.scene.scale.set(30*gltf.scene.scale.x, 30*gltf.scene.scale.y, 30* gltf.scene.scale.z);
 
       thisBrunnen.add(gltf.scene);
       thisBrunnen.loadingDone = true;
-      //thisBrunnen.animationMixer.addEventListener('finished', thisBrunnen.updateFunctionalState.bind(thisBrunnen));
+      thisBrunnen.animationMixer.addEventListener('finished', thisBrunnen.updateFunctionalState.bind(thisBrunnen));
 
     });
 

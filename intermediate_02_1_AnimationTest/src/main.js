@@ -41,14 +41,13 @@ function main() {
   const brunnen = new Brunnen();
   brunnen.position.set(-50,20,0);
   //brunnen.rotation.set(0, THREE.MathUtils.degToRad(-23), 0);
-  console.log(brunnen.children[11]);
   window.scene.add(brunnen);
 
-  /*const brunnenFromFile = new BrunnenFromFile();
+  const brunnenFromFile = new BrunnenFromFile();
   brunnenFromFile.position.set(50,10,0);
   brunnenFromFile.rotation.set(0, THREE.MathUtils.degToRad(-90), 0);
   //brunnenFromFile.addPhysics();
-  window.scene.add(brunnenFromFile);*/
+  window.scene.add(brunnenFromFile);
 
   /*const television = new Television();
   television.position.set(-30, 55.8, 0);
@@ -62,16 +61,6 @@ function main() {
   televisionFromFile.addPhysics();
   window.scene.add(televisionFromFile);*/
 
-/*  const tableFromFile = new TableFromFile();
-  tableFromFile.position.set(0, 0, 0);
-  tableFromFile.addPhysics();
-  window.scene.add(tableFromFile);*/
-
-  const plantFromFile = new PlantFromFile();
-  plantFromFile.position.set(-75, 75, -75);
-  plantFromFile.addPhysics();
-  //plantFromFile.addSound();
-  window.scene.add(plantFromFile);
 
   const floor = new Floor();
   floor.position.set(0, 0, 0);
@@ -128,6 +117,10 @@ function main() {
     /*if (televisionFromFile.animationMixer !== null) {
       televisionFromFile.animationMixer.update(delta);
     }*/
+
+    if(brunnenFromFile.animationMixer !== null){
+      brunnenFromFile.animationMixer.update(delta);
+    }
 
     window.physics.update(delta);
 
