@@ -13,6 +13,7 @@ import Physics from './physics/Physics.js';
 import Brunnen from "./objects/Brunnen.js";
 import Ground from "./objects/Ground.js";
 import Grass from "./objects/Grass.js";
+import Tree from './objects/Tree.js';
 
 // Event FUNKTIONEN!!!1!11!!!
 import {updateAspectRatio} from './eventfunctions/updateAspectRatio.js';
@@ -85,8 +86,13 @@ function main() {
   window.scene.add(floor);*/
 
   const ground = new Ground();
-  ground.position.set(0,0,0);
+  ground.position.set(0,-26,0);
   window.scene.add(ground);
+
+  const tree = new Tree();
+  tree.position.set(-200,75,-120);
+  tree.addPhysics();
+  window.scene.add(tree);
 
   /*const grass = new Grass();
   grass.position.set(-0,0,0);
@@ -133,6 +139,8 @@ function main() {
   const clock = new THREE.Clock();
 
   function mainLoop() {
+
+    //console.log(tree.position);
 
     stats.begin();
 

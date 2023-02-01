@@ -3,7 +3,7 @@ import CannonDebugger from '../../../../lib/cannon-es-debugger-1.0.0/dist/cannon
 
 export default class Physics {
 
-  constructor(debugRendering = true) {
+  constructor(debugRendering = false) {
 
     this.world = new CANNON.World();
 
@@ -166,6 +166,40 @@ export default class Physics {
     this.world.addBody(body);
 
     // Register object-body-pair
+    this.addPair(object, body);
+  }
+
+  addSphere(object, mass, radius, offsetX = 0, offsetY = 0, offsetZ = 0){
+
+    const offset = new CANNON.Vec3(offsetX, offsetY, offsetZ);
+
+
+    const body = new CANNON.Body({mass: mass});
+    body.addShape(new CANNON.Sphere(radius),offset);
+
+    body.position.copy(object.position);
+    body.quaternion.copy(object.quaternion);
+
+    this.world.addBody(body);
+    this.addPair(object, body);
+
+  }
+
+  addCylinderSphereCompound(object,mass,cyl_upperRadius,cyl_lowerRadius,cyl_height,cyl_segments,
+                            cyl_offsetX = 0, cyl_offsetY = 0, cyl_offsetZ = 0,
+                            sph_radius, sph_offsetX = 0, sph_offsetY = 0, sph_offsetZ = 0){
+
+    const body = new CANNON.Body({mass: mass});
+
+    const sph_offset = new CANNON.Vec3(sph_offsetX, sph_offsetY, sph_offsetZ);
+    const cyl_offset = new CANNON.Vec3(cyl_offsetX, cyl_offsetY, cyl_offsetZ);
+
+    body.addShape(new CANNON.Cylinder(cyl_upperRadius, cyl_lowerRadius, cyl_height, cyl_segments), cyl_offset);
+    body.addShape(new CANNON.Sphere(sph_radius),sph_offset);
+
+    body.position.copy(object.position);
+
+    this.world.addBody(body);
     this.addPair(object, body);
   }
 }
