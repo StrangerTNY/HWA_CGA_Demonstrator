@@ -21,7 +21,7 @@ export default class Tree extends THREE.Group{
     treeTrunk.castShadow = true;
 
     // Krone
-    const treeTopGeometry = new THREE.SphereGeometry(50,16,16);
+    const treeTopGeometry = new THREE.SphereGeometry(50*scale,16,16);
     const treeTopMaterial = new THREE.MeshStandardMaterial({color:0xFFFFFF, wireframe:false});
 
     const topMap = loader.load('src/images/Tree Top_COLOR_0.png');
@@ -57,7 +57,7 @@ export default class Tree extends THREE.Group{
     } else {
       window.physics.addCylinderSphereCompound(this,1000,9*scale,12*scale,150*scale,16,
           0,5*scale,0,
-          50,0,50*scale,0);
+          50*scale,0,50*scale,0);
     }
   }
 
