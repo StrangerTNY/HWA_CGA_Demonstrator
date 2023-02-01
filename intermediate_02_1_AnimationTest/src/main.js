@@ -70,7 +70,7 @@ function main() {
   const plantFromFile = new PlantFromFile();
   plantFromFile.position.set(-75, 75, -75);
   plantFromFile.addPhysics();
-  plantFromFile.addSound();
+  //plantFromFile.addSound();
   window.scene.add(plantFromFile);
 
   const floor = new Floor();
@@ -140,11 +140,11 @@ function main() {
   mainLoop();
 }
 
-document.getElementById("startButton").addEventListener("click", function () {
+//document.getElementById("startButton").addEventListener("click", function () {
   main();
-  document.getElementById("overlay").remove();
+  //document.getElementById("overlay").remove();
   window.onresize = updateAspectRatio;
   window.onclick = executeRaycast;
   window.onkeydown = keyDownAction;
   window.onkeyup = keyUpAction;
-});
+//});
