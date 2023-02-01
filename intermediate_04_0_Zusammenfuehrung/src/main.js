@@ -55,11 +55,11 @@ function main() {
   brunnen.position.set(-50,20,0);
   window.scene.add(brunnen);
 
-  /*const brunnenFromFile = new BrunnenFromFile();
+  const brunnenFromFile = new BrunnenFromFile();
   brunnenFromFile.position.set(50,10,0);
   brunnenFromFile.rotation.set(0, THREE.MathUtils.degToRad(-90), 0);
   //brunnenFromFile.addPhysics();
-  window.scene.add(brunnenFromFile);*/
+  window.scene.add(brunnenFromFile);
 
   const ground = new Ground();
   ground.position.set(0,-26,0);
@@ -67,13 +67,13 @@ function main() {
 
   const tree = new Tree(1);
   tree.position.set(-200,75,-120);
-  tree.addPhysics();
+  tree.addPhysics(1);
   window.scene.add(tree);
 
   const tree2 = new Tree(1.5);
-  tree2.position.set(200,75,-50);
+  tree2.position.set(200,275,-50);
   //tree2.scale.set(1.5,1.5,1.5);
-  tree2.addPhysics();
+  tree2.addPhysics(1.5);
   window.scene.add(tree2);
 
   const path = new Path();
@@ -115,7 +115,7 @@ function main() {
 
   function mainLoop() {
 
-    //console.log(tree.position);
+    //console.log(tree2.position);
 
     stats.begin();
 
@@ -127,9 +127,9 @@ function main() {
 
     TWEEN.update();
 
-    /*if(brunnenFromFile.animationMixer !== null){
+    if(brunnenFromFile.animationMixer !== null){
       brunnenFromFile.animationMixer.update(delta);
-    }*/
+    }
 
     window.physics.update(delta);
 

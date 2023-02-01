@@ -44,7 +44,7 @@ export default class Brunnen extends THREE.Group {
     const cavityGeometry = new THREE.CylinderGeometry(30, 30, 50, 8);
     cavityGeometry.scale(0.9, 1, 0.9);
     cavityGeometry.translate(0, 10, 0);
-    const cavity = new THREE.Mesh(cavityGeometry, brunnenMaterial);
+    const cavity = new THREE.Mesh(cavityGeometry, beckenMaterial);
 
     const brunnenCSG = CSG.fromMesh(brunnen);
     const cavityCSG = CSG.fromMesh(cavity);
@@ -52,16 +52,6 @@ export default class Brunnen extends THREE.Group {
     hollowBrunnen.castShadow = true;
     hollowBrunnen.rotation.set(0, THREE.MathUtils.degToRad(23), 0);
     this.add(hollowBrunnen);
-
-    // Brunnen Rand
-    // -------------
-    const randGeometry = new THREE.CylinderGeometry(35, 35, 4, 8);
-    randGeometry.translate(0, 23, 0);
-    const rand = new THREE.Mesh(randGeometry, brunnenMaterial);
-    const randCSG = CSG.fromMesh(rand);
-    const hollowRand = CSG.toMesh(randCSG.subtract(cavityCSG), rand.matrix, rand.material);
-    hollowRand.castShadow = true;
-    hollowBrunnen.add(hollowRand);
 
     //Brunnen Dach
     //----------------------------------
@@ -98,6 +88,15 @@ export default class Brunnen extends THREE.Group {
     dach.castShadow = true;
     this.add(dach);
 
+    // Brunnen Rand
+    // -------------
+    const randGeometry = new THREE.CylinderGeometry(35, 35, 4, 8);
+    randGeometry.translate(0, 23, 0);
+    const rand = new THREE.Mesh(randGeometry, dachMaterial);
+    const randCSG = CSG.fromMesh(rand);
+    const hollowRand = CSG.toMesh(randCSG.subtract(cavityCSG), rand.matrix, rand.material);
+    hollowRand.castShadow = true;
+    hollowBrunnen.add(hollowRand);
 
     //Metalspitze
     //---------------------------------
@@ -228,9 +227,15 @@ export default class Brunnen extends THREE.Group {
 
     //Brunnen Rolle
     //---------------------------------------------------
-
-    const rolleMaterial = new THREE.MeshLambertMaterial({color: 0x1e1500});
+    const rolleMaterial = new THREE.MeshLambertMaterial({color: 0x7F5500});
     const rolleGeometry = new THREE.CylinderGeometry(7, 7, 57);
+
+    const rolleMap = loader.load('src/images/brunnen/rolle.jpg');
+    rolleMap.repeat.set(5,1);
+    rolleMap.wrapS = THREE.RepeatWrapping;
+    rolleMap.wrapT = THREE.RepeatWrapping;
+
+    rolleMaterial.map = rolleMap;
     //rolleGeometry.translate(0,0,-75);
     const rolle = new THREE.Mesh(rolleGeometry, rolleMaterial);
     rolle.rotation.set(0, 0, THREE.MathUtils.degToRad(90));
@@ -293,9 +298,17 @@ export default class Brunnen extends THREE.Group {
 
     //Seil
     //--------------------------------------------------
-    const seilMaterial = new THREE.MeshLambertMaterial({color: 0x594b37});
+    const seilMaterial = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
     const seilGeometry = new THREE.TorusGeometry(8, 1.5, 16, 16);
     //seilGeometry.translate(0, 75, 0);
+
+    const seilMap = loader.load('src/images/brunnen/rope.jpg');
+    seilMap.repeat.set(5,1);
+    seilMap.wrapS = THREE.RepeatWrapping;
+    seilMap.wrapT = THREE.RepeatWrapping;
+
+    seilMaterial.map = seilMap;
+
     const seil = new THREE.Mesh(seilGeometry, seilMaterial);
     seil.rotation.set(THREE.MathUtils.degToRad(90), THREE.MathUtils.degToRad(0),0 );
     seil.castShadow =true;

@@ -51,12 +51,13 @@ export default class Tree extends THREE.Group{
     this.add(treeTrunk,treeTop);
   }
 
-  addPhysics() {
+  addPhysics(scale = 1) {
     if (this.loadingDone === false) {
       window.setTimeout(this.addPhysics.bind(this), 100);
     } else {
-      window.physics.addCylinderSphereCompound(this,1000,9,12,150,16,
-          0,5,0,50,0,50,0);
+      window.physics.addCylinderSphereCompound(this,1000,9*scale,12*scale,150*scale,16,
+          0,5*scale,0,
+          50,0,50*scale,0);
     }
   }
 
