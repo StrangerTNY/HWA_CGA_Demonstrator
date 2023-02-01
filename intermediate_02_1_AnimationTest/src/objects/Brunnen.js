@@ -73,9 +73,9 @@ export default class Brunnen extends THREE.Group {
     hollowDachGeruest.castShadow = true;
     this.add(hollowDachGeruest);
 
-    const dachGeometry = new THREE.ConeGeometry(55, 30, 4, 1,true);
+    const dachGeometry = new THREE.ConeGeometry(55, 36, 4, 1,true);
     const dach = new THREE.Mesh(dachGeometry, brunnenMaterial);
-    dach.position.set(0,120,0);
+    dach.position.set(0,123,0);
     dach.rotation.set(0, THREE.MathUtils.degToRad(45), 0);
     dach.castShadow = true;
     this.add(dach);
@@ -83,13 +83,13 @@ export default class Brunnen extends THREE.Group {
 
     //Metalspitze
     //---------------------------------
-    const spitzenBaseGeometry = new THREE.TorusGeometry(3,.3,32,32);
+    const spitzenBaseGeometry = new THREE.TorusGeometry(4,.6,32,32);
     const spitzenBase = new THREE.Mesh(spitzenBaseGeometry, metalMaterial);
-    spitzenBase.position.set(0,14,0);
+    spitzenBase.position.set(0,16,0);
     spitzenBase.rotation.set(THREE.MathUtils.degToRad(90),0,0);
     dach.add(spitzenBase);
 
-    const spitze1Geometry = new THREE.CylinderGeometry(2.9,2.9,1.5,32);
+    const spitze1Geometry = new THREE.CylinderGeometry(3.9,3.9,1.5,32);
     const spitze1 = new THREE.Mesh(spitze1Geometry, metalMaterial);
     spitze1.rotation.set(THREE.MathUtils.degToRad(90),0,0);
     spitze1.position.set(0,0,-1);
@@ -97,24 +97,24 @@ export default class Brunnen extends THREE.Group {
 
     const points = [];
     for ( let i = 0; i < 10; i ++ ) {
-      points.push( new THREE.Vector2( Math.sin( i * 0.2 ) * 2 +1 , ( i - 5 ) * 0.5) );
+      points.push( new THREE.Vector2( Math.sin( i * 0.2 ) * 2 +2.2 , ( i - 5 ) * 0.7) );
     }
     const spitze2Geometry = new THREE.LatheGeometry( points );
     const spitze2 = new THREE.Mesh( spitze2Geometry, metalMaterial );
     spitze2.rotation.set(THREE.MathUtils.degToRad(90),0,0);
-    spitze2.position.set(0,0,-3.5);
+    spitze2.position.set(0,0,-4.5);
     spitzenBase.add(spitze2);
 
-    const spitze3Geometry = new THREE.CircleGeometry(1,32);
+    const spitze3Geometry = new THREE.CircleGeometry(2,32);
     const spitze3 = new THREE.Mesh(spitze3Geometry, metalMaterial);
     metalMaterial.side = THREE.DoubleSide;
     spitze3.rotation.set(0,0,THREE.MathUtils.degToRad(90));
-    spitze3.position.set(0,0,-6);
+    spitze3.position.set(0,0,-8);
     spitzenBase.add(spitze3);
 
     const spitze4Geometry = new THREE.ConeGeometry(0.7,3,32);
     const spitze4 = new THREE.Mesh(spitze4Geometry,metalMaterial);
-    spitze4.position.set(0,0,-6);
+    spitze4.position.set(0,0,-9);
     spitze4.rotation.set(THREE.MathUtils.degToRad(-90),0,THREE.MathUtils.degToRad(0));
     spitzenBase.add(spitze4);
 
@@ -346,6 +346,15 @@ export default class Brunnen extends THREE.Group {
       this.children[3].children[1].visible = true;
     }
 
+  }
+
+  addPhysics() {
+    if (this.loadingDone === false) {
+      window.setTimeout(this.addPhysics.bind(this), 100);
+    } else {
+      //window.physics.addBox(this, 100, 90, 170, 80, 0, 65, 0);
+      window.physics.addCylinder(this,100,50,50,170,6,0,64.2,0,0,THREE.MathUtils.degToRad(90));
+    }
   }
 
 }

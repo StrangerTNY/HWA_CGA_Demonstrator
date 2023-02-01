@@ -7,6 +7,7 @@ export default class BrunnenFromFile extends THREE.Group {
     super();
     this.gltfLoader = new GLTFLoader();
     this.loadingDone = false;
+    this.waterTexture = null;
     this.animationMixer = null;
     this.animations = new Map();
     this.state = {
@@ -16,7 +17,7 @@ export default class BrunnenFromFile extends THREE.Group {
   }
 
   load(thisBrunnen){
-    this.gltfLoader.load('../../models/Brunnen.gltf', function (gltf){
+    this.gltfLoader.load('../../models/Brunnen3.gltf', function (gltf){
 
       gltf.scene.traverse(function (child){
         if(child.isMesh){
@@ -30,10 +31,20 @@ export default class BrunnenFromFile extends THREE.Group {
         if (child.name === 'Brunnen_2' ) {
           //console.log(child.name);
           child.castShadow = true;
+          const waterMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+          thisBrunnen.waterTexture = new THREE.TextureLoader().load('src/images/water.png');
+          waterMaterial.map = thisBrunnen.waterTexture;
+
+          const waterBrunnenGeometry = new THREE.CircleGeometry(0.9,32);
+          thisBrunnen.waterBrunnen = new THREE.Mesh(waterBrunnenGeometry, waterMaterial);
+          thisBrunnen.waterBrunnen.position.set(0,1,0);
+          thisBrunnen.waterBrunnen.rotation.set(THREE.MathUtils.degToRad(-90),0,0);
+          child.add(thisBrunnen.waterBrunnen);
         }
         if (child.name === 'Brunnen_3' ) {
           //console.log(child.name);
           child.castShadow = true;
+
         }
         if (child.name === 'Eimer_1' ) {
           //console.log(child.name);
@@ -79,6 +90,18 @@ export default class BrunnenFromFile extends THREE.Group {
           //console.log(child.name);
           child.castShadow = true;
         }
+        if (child.name === 'Water' ) {
+          //console.log(child.name);
+          const waterMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+          thisBrunnen.waterTexture = new THREE.TextureLoader().load('src/images/water.png');
+          waterMaterial.map = thisBrunnen.waterTexture;
+
+          const waterBrunnenGeometry = new THREE.CircleGeometry(0.3,32);
+          thisBrunnen.waterBrunnen = new THREE.Mesh(waterBrunnenGeometry, waterMaterial);
+          thisBrunnen.waterBrunnen.position.set(0,0.03,0);
+          thisBrunnen.waterBrunnen.rotation.set(THREE.MathUtils.degToRad(-90),0,0);
+          child.add(thisBrunnen.waterBrunnen);
+        }
 
 
       });
@@ -104,11 +127,12 @@ export default class BrunnenFromFile extends THREE.Group {
 
 
   }
-  /*addPhysics() {
+  addPhysics() {
     if (this.loadingDone === false) {
       window.setTimeout(this.addPhysics.bind(this), 100);
     } else {
-      window.physics.addCylinder(this, 100, 30,30,35,8,0,10);
+      //window.physics.addBox(this, 100, 90, 170, 70, 0, 76, 0);
+      window.physics.addCylinder(this,100,50,50,172,6,0,76,0,0,THREE.MathUtils.degToRad(90));
     }
-  }*/
+  }
 }

@@ -23,6 +23,7 @@ export function executeRaycast(event) {
 
       }
     }else if(firstHit.name === 'Mechanik_2' || firstHit.name === 'Mechanik_3'){
+
       firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
 
       if(firstHit.parentBrunnen.state.eimerDown){
