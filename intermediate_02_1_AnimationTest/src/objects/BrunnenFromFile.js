@@ -11,7 +11,8 @@ export default class BrunnenFromFile extends THREE.Group {
     this.animationMixer = null;
     this.animations = new Map();
     this.state = {
-      eimerDown: false
+      eimerDown: false,
+      hasWater: false
     };
     this.load(this);
   }

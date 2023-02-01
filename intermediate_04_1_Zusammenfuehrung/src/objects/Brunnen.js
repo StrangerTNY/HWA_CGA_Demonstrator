@@ -23,12 +23,27 @@ export default class Brunnen extends THREE.Group {
       metalness: 0.4
     });
 
+    //Materials
+    //------------------------
+    const brunnenMaterial = new THREE.MeshLambertMaterial({color: 0x561e0b});
+    brunnenMaterial.side = THREE.DoubleSide;
+
+    const beckenMaterial = new THREE.MeshLambertMaterial({color: 0x915D45});
+    beckenMaterial.side = THREE.DoubleSide;
+
+    const dachMaterial = new THREE.MeshLambertMaterial({color: 0x915D45});
+
+    const eimerMaterial = new THREE.MeshLambertMaterial({color: 0x915D45});
+
+    const stabMaterial = new THREE.MeshLambertMaterial({color: 0x684222});
+
+    const rolleMaterial = new THREE.MeshLambertMaterial({color: 0x7F5500});
+
+    const seilMaterial = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
+
+
     // Brunnen Becken
     // -------------
-    const brunnenMaterial = new THREE.MeshLambertMaterial({color: 0x561e0b});
-    const beckenMaterial = new THREE.MeshLambertMaterial({color: 0x915D45});
-    brunnenMaterial.side = THREE.DoubleSide;
-    beckenMaterial.side = THREE.DoubleSide;
     const brunnenGeometry = new THREE.CylinderGeometry(30, 30, 43, 8);
 
     const beckenMap = loader.load('src/images/brunnen/base_u_eimer.jpg');
@@ -53,10 +68,21 @@ export default class Brunnen extends THREE.Group {
     hollowBrunnen.rotation.set(0, THREE.MathUtils.degToRad(23), 0);
     this.add(hollowBrunnen);
 
+    // Becken Rand
+    // -------------
+    const randGeometry = new THREE.CylinderGeometry(35, 35, 4, 8);
+    randGeometry.translate(0, 23, 0);
+    const rand = new THREE.Mesh(randGeometry, dachMaterial);
+    const randCSG = CSG.fromMesh(rand);
+    const hollowRand = CSG.toMesh(randCSG.subtract(cavityCSG), rand.matrix, rand.material);
+    hollowRand.castShadow = true;
+    hollowBrunnen.add(hollowRand);
+
+
+
     //Brunnen Dach
     //----------------------------------
 
-    const dachMaterial = new THREE.MeshLambertMaterial({color: 0x915D45});
     const dachMap = loader.load('src/images/brunnen/brunnen_dach.jpg');
     dachMap.repeat.set(2,2);
     dachMap.wrapS = THREE.RepeatWrapping;
@@ -64,11 +90,18 @@ export default class Brunnen extends THREE.Group {
     dachMaterial.map = dachMap;
     dachMaterial.side = THREE.DoubleSide;
 
+    const dachGeometry = new THREE.ConeGeometry(55, 36, 4, 1,true);
+    const dach = new THREE.Mesh(dachGeometry, dachMaterial);
+    dach.position.set(0,123,0);
+    dach.rotation.set(0, THREE.MathUtils.degToRad(45), 0);
+    dach.castShadow = true;
+    this.add(dach);
+
+    //Brunnen Gerüst
+    //----------------------
     const dachGeruestGeometry = new THREE.BoxGeometry(70, 5, 70);
     dachGeruestGeometry.translate(0, 103, 0);
     const dachGeruest = new THREE.Mesh(dachGeruestGeometry, dachMaterial);
-    //dachGeruest.rotation.set(0,THREE.MathUtils.degToRad(23),0);
-    //this.add(dachGeruest);
 
     const dachGeruestCavityGeometry = new THREE.BoxGeometry(70, 5, 70);
     dachGeruestCavityGeometry.scale(0.8, 1, 0.8);
@@ -81,24 +114,31 @@ export default class Brunnen extends THREE.Group {
     hollowDachGeruest.castShadow = true;
     this.add(hollowDachGeruest);
 
-    const dachGeometry = new THREE.ConeGeometry(55, 36, 4, 1,true);
-    const dach = new THREE.Mesh(dachGeometry, dachMaterial);
-    dach.position.set(0,123,0);
-    dach.rotation.set(0, THREE.MathUtils.degToRad(45), 0);
-    dach.castShadow = true;
-    this.add(dach);
+    const geruestGeometry = new THREE.BoxGeometry(2, 100, 7);
+    geruestGeometry.translate(0, 53, 0);
+    const geruest1 = new THREE.Mesh(geruestGeometry, dachMaterial);
+    geruest1.position.set(-33, 0, 0);
+    geruest1.castShadow = true;
+    hollowDachGeruest.add(geruest1);
 
-    // Brunnen Rand
-    // -------------
-    const randGeometry = new THREE.CylinderGeometry(35, 35, 4, 8);
-    randGeometry.translate(0, 23, 0);
-    const rand = new THREE.Mesh(randGeometry, dachMaterial);
-    const randCSG = CSG.fromMesh(rand);
-    const hollowRand = CSG.toMesh(randCSG.subtract(cavityCSG), rand.matrix, rand.material);
-    hollowRand.castShadow = true;
-    hollowBrunnen.add(hollowRand);
+    const geruest2 = geruest1.clone();
+    geruest2.position.set(33, 0, 0);
+    geruest2.castShadow = true;
+    hollowDachGeruest.add(geruest2);
 
-    //Metalspitze
+    const geruestAddonGeometry = new THREE.BoxGeometry(2, 18, 7);
+    geruestAddonGeometry.translate(0, 70, 0);
+    const geruestAddon1 = new THREE.Mesh(geruestAddonGeometry, dachMaterial);
+    geruestAddon1.position.set(-2, 0, 0);
+    geruestAddon1.castShadow = true;
+    geruest1.add(geruestAddon1);
+
+    const geruestAddon2 = geruestAddon1.clone();
+    geruestAddon2.position.set(2, 0, 0);
+    geruestAddon2.castShadow = true;
+    geruest2.add(geruestAddon2);
+
+    //Dach Metalspitze
     //---------------------------------
     const spitzenBaseGeometry = new THREE.TorusGeometry(4,.6,32,32);
     const spitzenBase = new THREE.Mesh(spitzenBaseGeometry, metalMaterial);
@@ -135,36 +175,10 @@ export default class Brunnen extends THREE.Group {
     spitze4.rotation.set(THREE.MathUtils.degToRad(-90),0,THREE.MathUtils.degToRad(0));
     spitzenBase.add(spitze4);
 
-    //Brunnen Gerüst
-    //----------------------
-    const geruestGeometry = new THREE.BoxGeometry(2, 100, 7);
-    geruestGeometry.translate(0, 53, 0);
-    const geruest1 = new THREE.Mesh(geruestGeometry, dachMaterial);
-    geruest1.position.set(-33, 0, 0);
-    geruest1.castShadow = true;
-    hollowDachGeruest.add(geruest1);
-
-    const geruest2 = geruest1.clone();
-    geruest2.position.set(33, 0, 0);
-    geruest2.castShadow = true;
-    hollowDachGeruest.add(geruest2);
-
-    const geruestAddonGeometry = new THREE.BoxGeometry(2, 18, 7);
-    geruestAddonGeometry.translate(0, 70, 0);
-    const geruestAddon1 = new THREE.Mesh(geruestAddonGeometry, dachMaterial);
-    geruestAddon1.position.set(-2, 0, 0);
-    geruestAddon1.castShadow = true;
-    geruest1.add(geruestAddon1);
-
-    const geruestAddon2 = geruestAddon1.clone();
-    geruestAddon2.position.set(2, 0, 0);
-    geruestAddon2.castShadow = true;
-    geruest2.add(geruestAddon2);
 
     //Eimer
     //---------------------------------------
 
-    const eimerMaterial = new THREE.MeshLambertMaterial({color: 0x915D45});
     const eimerMap = loader.load('src/images/brunnen/base_u_eimer.jpg');
     eimerMap.repeat.set(1,1);
     eimerMap.wrapS = THREE.RepeatWrapping;
@@ -174,7 +188,6 @@ export default class Brunnen extends THREE.Group {
     const eimerGeometry = new THREE.CylinderGeometry(10, 10, 15);
     const eimer = new THREE.Mesh(eimerGeometry, eimerMaterial);
     eimer.position.set(0, 35, 0);
-    //this.add(eimer);
 
     const eimerCavityGeometry = new THREE.CylinderGeometry(10, 10, 14);
     eimerCavityGeometry.translate(0, 1, 0);
@@ -210,10 +223,15 @@ export default class Brunnen extends THREE.Group {
     const eimerGriff = new THREE.Mesh(eimerGriffGeometry, metalMaterial);
     eimerGriff.position.set(0, 7, 0);
     eimerGriff.castShadow = true;
+    hollowEimer.state = {
+      eimerDown: false,
+      eimerUp: true
+    };
     hollowEimer.add(eimerGriff);
 
     hollowEimer.name = 'eimer';
     hollowEimer.children[0].name = 'eimer';
+
 
     //Eimer Animation
     //-------------------------------------------------------
@@ -225,27 +243,8 @@ export default class Brunnen extends THREE.Group {
     this.animations.push(eimerAnimation);
 
 
-    //Brunnen Rolle
-    //---------------------------------------------------
-    const rolleMaterial = new THREE.MeshLambertMaterial({color: 0x7F5500});
-    const rolleGeometry = new THREE.CylinderGeometry(7, 7, 57);
-
-    const rolleMap = loader.load('src/images/brunnen/rolle.jpg');
-    rolleMap.repeat.set(5,1);
-    rolleMap.wrapS = THREE.RepeatWrapping;
-    rolleMap.wrapT = THREE.RepeatWrapping;
-
-    rolleMaterial.map = rolleMap;
-    //rolleGeometry.translate(0,0,-75);
-    const rolle = new THREE.Mesh(rolleGeometry, rolleMaterial);
-    rolle.rotation.set(0, 0, THREE.MathUtils.degToRad(90));
-    rolle.position.set(0, 75, 0);
-    rolle.castShadow = true;
-    this.add(rolle);
-
     //Griff
     //------------------------------------------------------
-    const stabMaterial = new THREE.MeshLambertMaterial({color: 0x684222});
     const stabGeometry = new THREE.CylinderGeometry(1, 1, 90, 8);
     const hebelGeometry = new THREE.BoxGeometry(4, 2, 30);
     const griffGeometry = new THREE.CylinderGeometry(1, 1, 10);
@@ -273,6 +272,21 @@ export default class Brunnen extends THREE.Group {
     this.animations.push(griffAnimation);
 
 
+
+    //Brunnen Rolle
+    //---------------------------------------------------
+    const rolleGeometry = new THREE.CylinderGeometry(7, 7, 57);
+
+    const rolleMap = loader.load('src/images/brunnen/rolle.jpg');
+    rolleMap.repeat.set(5,1);
+    rolleMap.wrapS = THREE.RepeatWrapping;
+    rolleMap.wrapT = THREE.RepeatWrapping;
+
+    rolleMaterial.map = rolleMap;
+    const rolle = new THREE.Mesh(rolleGeometry, rolleMaterial);
+    rolle.castShadow = true;
+    stab.add(rolle);
+
     //Wasser
     //--------------------------------
     const waterEimerGeometry = new CircleGeometry(10);
@@ -287,6 +301,7 @@ export default class Brunnen extends THREE.Group {
     waterEimer.rotation.set(THREE.MathUtils.degToRad(-90),0,0);
     waterEimer.position.set(0,7,0);
     waterEimer.visible = false;
+    waterEimer.state = false;
     hollowEimer.add(waterEimer);
 
     const waterBrunnenGeometry = new CircleGeometry(27.5);
@@ -298,9 +313,7 @@ export default class Brunnen extends THREE.Group {
 
     //Seil
     //--------------------------------------------------
-    const seilMaterial = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
     const seilGeometry = new THREE.TorusGeometry(8, 1.5, 16, 16);
-    //seilGeometry.translate(0, 75, 0);
 
     const seilMap = loader.load('src/images/brunnen/rope.jpg');
     seilMap.repeat.set(5,1);
@@ -378,10 +391,14 @@ export default class Brunnen extends THREE.Group {
     }
 
   updateFunctionalState() {
-    const griffRotation = THREE.MathUtils.radToDeg(this.children[5].rotation.x) === 360;
+    const griffRotation = THREE.MathUtils.radToDeg(this.children[4].rotation.x) === 360;
+
 
     if(griffRotation){
       this.children[3].children[1].visible = true;
+      //his.children[3].children[1].state = true;
+
+
     }
 
   }

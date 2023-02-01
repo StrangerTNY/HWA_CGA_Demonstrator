@@ -13,19 +13,29 @@ export function executeRaycast(event) {
   if (intersects.length > 0) {
     let firstHit = intersects[0].object;
 
-    if(firstHit.name === 'griff') {
+    if(firstHit.name === 'griff' && firstHit.parent.parent.children[3].children[1].state === false) {
+
       if (firstHit.children.length > 0) {
         firstHit.linearAnimation.toggleEndPosition();
         firstHit.parent.children[3].linearAnimation.toggleEndPosition();
+
       } else {
         firstHit.parent.linearAnimation.toggleEndPosition();
         firstHit.parent.parent.children[3].linearAnimation.toggleEndPosition();
-
+      }
+      if(!firstHit.parent.parent.children[3].eimerDown){
+        firstHit.parent.parent.children[3].eimerDown = !firstHit.parent.parent.children[3].eimerDown;
+      }else if(firstHit.parent.parent.children[3].eimerUp){
+        firstHit.parent.parent.children[3].eimerUp = !firstHit.parent.parent.children[3].eimerUp;
+      }else{
+        firstHit.parent.parent.children[3].children[1].state = true;
+        firstHit.parent.parent.children[3].eimerUp = true;
+        firstHit.parent.parent.children[3].eimerDown = false;
       }
     }else if(firstHit.name === 'Mechanik_2' || firstHit.name === 'Mechanik_3'){
       firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
 
-      if(firstHit.parentBrunnen.state.eimerDown){
+      if(firstHit.parentBrunnen.state.eimerDown && !firstHit.parentBrunnen.state.hasWater){
         firstHit.parentBrunnen.animations.get('EimerUp').stop();
         firstHit.parentBrunnen.animations.get('MechanikUp').stop();
         firstHit.parentBrunnen.animations.get('RopeUp').stop();
@@ -34,7 +44,7 @@ export function executeRaycast(event) {
         firstHit.parentBrunnen.animations.get('RopeDown').play();
         firstHit.parentBrunnen.animations.get('MechnikDown').play();
 
-      }else{
+      }else if(!firstHit.parentBrunnen.state.eimerDown){
         firstHit.parentBrunnen.animations.get('EimerDown').stop();
         firstHit.parentBrunnen.animations.get('MechnikDown').stop();
         firstHit.parentBrunnen.animations.get('RopeDown').stop();
@@ -42,7 +52,7 @@ export function executeRaycast(event) {
         firstHit.parentBrunnen.animations.get('RopeUp').play();
         firstHit.parentBrunnen.animations.get('WaterAction').play();
         firstHit.parentBrunnen.animations.get('MechanikUp').play();
-
+        firstHit.parentBrunnen.state.hasWater = true;
 
       }
 
