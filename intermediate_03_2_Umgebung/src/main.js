@@ -85,7 +85,7 @@ function main() {
   window.scene.add(floor);*/
 
   const ground = new Ground();
-  ground.position.set(0,-26,0);
+  ground.position.set(0,0,0);
   window.scene.add(ground);
 
   /*const grass = new Grass();
@@ -104,7 +104,7 @@ function main() {
   window.scene.add(ambientLight);
 
   const spotLight = new THREE.SpotLight(0xffffff);
-  spotLight.position.set(100, 500, 200);
+  spotLight.position.set(320, 240, 150);
   spotLight.intensity = 1;
   spotLight.target = ground;
   spotLight.angle = THREE.MathUtils.degToRad(30);
