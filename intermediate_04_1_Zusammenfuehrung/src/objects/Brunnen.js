@@ -10,6 +10,7 @@ export default class Brunnen extends THREE.Group {
     super();
 
     this.animations = [];
+    this.waterSound = null;
     this.addParts();
   }
 
@@ -325,11 +326,17 @@ export default class Brunnen extends THREE.Group {
       opacity: 0.8,
       shininess: 100
     });
+
     const waterEimer = new THREE.Mesh(waterEimerGeometry, waterMaterial);
     waterEimer.rotation.set(THREE.MathUtils.degToRad(-90),0,0);
     waterEimer.position.set(0,7,0);
     waterEimer.visible = false;
     waterEimer.state = false;
+
+    document.waterSound = document.createElement('water');
+    document.waterSound.src = 'src/sounds/water splash.mp4'
+    this.waterSound = new THREE.VideoTexture(document.waterSound);
+    //waterMaterial.map = this.waterSound;
     hollowEimer.add(waterEimer);
 
     const waterBrunnenGeometry = new CircleGeometry(27.5);
@@ -418,13 +425,17 @@ export default class Brunnen extends THREE.Group {
     const griffRotation = THREE.MathUtils.radToDeg(this.children[4].rotation.x) === 360;
     const eimerTilt = THREE.MathUtils.radToDeg(this.children[3].children[0].rotation.x) > 116;
 
+    const water = this.children[3].children[0].children[1];
+
     if(griffRotation){
       this.children[3].children[0].children[1].visible = true;
     }
     if(eimerTilt){
       this.children[3].children[0].children[1].visible = false;
+      document.waterSound.volume = 1.0;
+      document.waterSound.play();
+      water.material.map = this.waterSound;
     }
-
   }
 
   addPhysics() {
