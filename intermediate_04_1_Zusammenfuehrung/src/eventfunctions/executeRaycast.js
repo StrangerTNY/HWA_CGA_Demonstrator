@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 window.raycaster = new THREE.Raycaster();
 
 export function executeRaycast(event) {
@@ -10,32 +11,55 @@ export function executeRaycast(event) {
   window.raycaster.setFromCamera(mousePosition, window.camera);
   let intersects = window.raycaster.intersectObject(window.scene, true);
 
+
   if (intersects.length > 0) {
     let firstHit = intersects[0].object;
+    console.log(firstHit.name);
 
-    if(firstHit.name === 'griff' && firstHit.parent.parent.children[3].children[1].state === false) {
+    if (firstHit.name === 'griff' && firstHit.parent.parent.children[3].children[0].children[1].state === false) {
+      firstHit.parent.linearAnimation.toggleEndPosition();
+      firstHit.parent.parent.children[3].linearAnimation.toggleEndPosition();
 
-      if (firstHit.children.length > 0) {
-        firstHit.linearAnimation.toggleEndPosition();
-        firstHit.parent.children[3].linearAnimation.toggleEndPosition();
-
+      if (!firstHit.parent.parent.children[3].children[0].eimerDown) {
+        firstHit.parent.parent.children[3].children[0].eimerDown = !firstHit.parent.parent.children[3].children[0].eimerDown;
       } else {
-        firstHit.parent.linearAnimation.toggleEndPosition();
-        firstHit.parent.parent.children[3].linearAnimation.toggleEndPosition();
+        firstHit.parent.parent.children[3].children[0].children[1].state = true;
+        firstHit.parent.parent.children[3].children[0].eimerDown = false;
       }
-      if(!firstHit.parent.parent.children[3].eimerDown){
-        firstHit.parent.parent.children[3].eimerDown = !firstHit.parent.parent.children[3].eimerDown;
-      }else if(firstHit.parent.parent.children[3].eimerUp){
-        firstHit.parent.parent.children[3].eimerUp = !firstHit.parent.parent.children[3].eimerUp;
-      }else{
-        firstHit.parent.parent.children[3].children[1].state = true;
-        firstHit.parent.parent.children[3].eimerUp = true;
-        firstHit.parent.parent.children[3].eimerDown = false;
-      }
-    }else if(firstHit.name === 'Mechanik_2' || firstHit.name === 'Mechanik_3'){
-      firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
+    } else if (firstHit.name === 'eimer') {
+      if (firstHit.children.length > 0) {
+        if (firstHit.children[1].state) {
+          firstHit.tweenMoveEimer.start();
+          setTimeout(() => {
+            firstHit.tweenTiltEimerDown.start();
+          }, 2000);
+          setTimeout(() => {
+            firstHit.tweenTiltEimerUp.start();
+          }, 3000);
+          setTimeout(() => {
+            firstHit.tweenMoveEimerBack.start();
+          }, 4000);
+          firstHit.children[1].state = false;
+        }
+      } else {
+        if (firstHit.parent.children[1].state) {
+          firstHit.parent.tweenMoveEimer.start();
+          setTimeout(() => {
+            firstHit.parent.tweenTiltEimerDown.start();
+          }, 2000);
+          setTimeout(() => {
+            firstHit.parent.tweenTiltEimerUp.start();
+          }, 3000);
+          setTimeout(() => {
+            firstHit.parent.tweenMoveEimerBack.start();
+          }, 4000);
+          firstHit.parent.children[1].state = false;
+        }
 
-      if(firstHit.parentBrunnen.state.eimerDown && !firstHit.parentBrunnen.state.hasWater){
+      }
+    } else if ((firstHit.name === 'Mechanik_2' || firstHit.name === 'Mechanik_3') ) {
+
+      if (!firstHit.parentBrunnen.state.hasWater) {
         firstHit.parentBrunnen.animations.get('EimerUp').stop();
         firstHit.parentBrunnen.animations.get('MechanikUp').stop();
         firstHit.parentBrunnen.animations.get('RopeUp').stop();
@@ -43,8 +67,10 @@ export function executeRaycast(event) {
         firstHit.parentBrunnen.animations.get('EimerDown').play();
         firstHit.parentBrunnen.animations.get('RopeDown').play();
         firstHit.parentBrunnen.animations.get('MechnikDown').play();
+        firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
+        firstHit.parentBrunnen.state.hasWater = !firstHit.parentBrunnen.state.hasWater;
 
-      }else if(!firstHit.parentBrunnen.state.eimerDown){
+      } else if(firstHit.parentBrunnen.state.eimerDown) {
         firstHit.parentBrunnen.animations.get('EimerDown').stop();
         firstHit.parentBrunnen.animations.get('MechnikDown').stop();
         firstHit.parentBrunnen.animations.get('RopeDown').stop();
@@ -52,53 +78,24 @@ export function executeRaycast(event) {
         firstHit.parentBrunnen.animations.get('RopeUp').play();
         firstHit.parentBrunnen.animations.get('WaterAction').play();
         firstHit.parentBrunnen.animations.get('MechanikUp').play();
-        firstHit.parentBrunnen.state.hasWater = true;
+        firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
+
 
       }
+    }else if(firstHit.name === 'Eimer_2'){
 
+      if(firstHit.parentBrunnen.state.hasWater){
+        firstHit.parentBrunnen.animations.get('EmptyEimerBack').stop();
+        firstHit.parentBrunen.animations.get('EmptyEimer').play();
+        firstHit.parentBrunnen.animations.get('WaterAction').stop();
+        setTimeout(() =>{
+
+          firstHit.parentBrunnen.animations.get('EmptyEimer').stop();
+          firstHit.parentBrunen.animations.get('EmptyEimerBack').play();
+        },500);
+        firstHit.parentBrunnen.state.hasWater = !firstHit.parentBrunnen.state.hasWater;
+      }
     }
   }
-  /*if (firstHit.name === 'powerKnob' || firstHit.name === 'volumeKnob') {
-    if (firstHit.children.length > 0) {
-      firstHit.linearAnimation.toggleEndPosition();
-    } else {
-      firstHit.parent.linearAnimation.toggleEndPosition();
-    }
-  } else if (firstHit.name === 'antenna') {
-    firstHit.up = !firstHit.up;
-    if (firstHit.up) {
-      firstHit.tweenAnimationDown.stop();
-      firstHit.tweenAnimationUp.start();
-    } else {
-      firstHit.tweenAnimationUp.stop();
-      firstHit.tweenAnimationDown.start();
-    }
-  } else if (firstHit.name === 'powerKnobGLTF') {
-    firstHit.parentTelevision.state.powerOn = !firstHit.parentTelevision.state.powerOn;
-    if (firstHit.parentTelevision.state.powerOn) {
-      firstHit.parentTelevision.animations.get('powerKnob_off').stop();
-      firstHit.parentTelevision.animations.get('powerKnob_on').play();
-    } else {
-      firstHit.parentTelevision.animations.get('powerKnob_on').stop();
-      firstHit.parentTelevision.animations.get('powerKnob_off').play();
-    }
-  } else if (firstHit.name === 'volumeKnobGLTF') {
-    firstHit.parentTelevision.state.volumeHigh = !firstHit.parentTelevision.state.volumeHigh;
-    if (firstHit.parentTelevision.state.volumeHigh) {
-      firstHit.parentTelevision.animations.get('volumeKnob_low').stop();
-      firstHit.parentTelevision.animations.get('volumeKnob_high').play();
-    } else {
-      firstHit.parentTelevision.animations.get('volumeKnob_high').stop();
-      firstHit.parentTelevision.animations.get('volumeKnob_low').play();
-    }
-  } else if (firstHit.name === 'antennaGLTF') {
-    firstHit.parentTelevision.state.antennaUp = !firstHit.parentTelevision.state.antennaUp;
-    if (firstHit.parentTelevision.state.antennaUp) {
-      firstHit.parentTelevision.animations.get('antenna_down').stop();
-      firstHit.parentTelevision.animations.get('antenna_up').play();
-    } else {
-      firstHit.parentTelevision.animations.get('antenna_up').stop();
-      firstHit.parentTelevision.animations.get('antenna_down').play();
-    }
-  }*/
+
 }

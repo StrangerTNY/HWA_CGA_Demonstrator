@@ -12,13 +12,13 @@ export default class BrunnenFromFile extends THREE.Group {
     this.animations = new Map();
     this.state = {
       eimerDown: false,
-      hasWater: false
+      hasWater: true
     };
     this.load(this);
   }
 
   load(thisBrunnen){
-    this.gltfLoader.load('../../models/Brunnen3.gltf', function (gltf){
+    this.gltfLoader.load('../../models/Brunnen4.gltf', function (gltf){
 
       gltf.scene.traverse(function (child){
         if(child.isMesh){
@@ -113,7 +113,7 @@ export default class BrunnenFromFile extends THREE.Group {
         action.setLoop(THREE.LoopOnce);
         thisBrunnen.animations.set(gltf.animations[i].name, action);
 
-        //console.log(gltf.animations[i].name);
+        console.log(gltf.animations[i].name);
       }
       gltf.scene.scale.set(30*gltf.scene.scale.x, 30*gltf.scene.scale.y, 30* gltf.scene.scale.z);
 

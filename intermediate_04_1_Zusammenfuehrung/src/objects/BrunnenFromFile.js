@@ -10,13 +10,14 @@ export default class BrunnenFromFile extends THREE.Group {
     this.animationMixer = null;
     this.animations = new Map();
     this.state = {
-      eimerDown: false
+      eimerDown: false,
+      hasWater: false
     };
     this.load(this);
   }
 
   load(thisBrunnen){
-    this.gltfLoader.load('../../models/Brunnen3.gltf', function (gltf){
+    this.gltfLoader.load('../../models/Brunnen4.gltf', function (gltf){
 
       gltf.scene.traverse(function (child){
         if(child.isMesh){

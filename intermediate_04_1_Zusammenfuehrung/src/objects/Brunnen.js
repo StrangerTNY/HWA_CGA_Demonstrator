@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as TWEEN from 'tween';
 import CSG from 'csg';
 import {Animation, AnimationType, AnimationAxis} from '../animation/Animation.js';
 import {CircleGeometry} from "three";
@@ -176,6 +177,14 @@ export default class Brunnen extends THREE.Group {
     spitzenBase.add(spitze4);
 
 
+    //Eimer Seil
+    //---------------------------------
+    const eimerSeilGeometry = new THREE.CylinderGeometry(1.2, 1.2, 40);
+    const eimerSeil = new THREE.Mesh(eimerSeilGeometry, seilMaterial);
+    eimerSeil.position.set(0, 64, 0);
+    eimerSeil.castShadow =true;
+    this.add(eimerSeil);
+
     //Eimer
     //---------------------------------------
 
@@ -198,9 +207,9 @@ export default class Brunnen extends THREE.Group {
     const eimerCavityCSG = CSG.fromMesh(eimerCavity);
     const hollowEimer = CSG.toMesh(eimerCSG.subtract(eimerCavityCSG), eimer.matrix, eimer.material);
     hollowEimer.castShadow = true;
-    hollowEimer.position.set(0, 30, 0);
+    hollowEimer.position.set(0, -33.5, 0);
 
-    this.add(hollowEimer);
+    eimerSeil.add(hollowEimer);
 
     const eimerGriffProfile = new THREE.Shape().absellipse(0, 0, 0.2, 0.2,
         0, THREE.MathUtils.degToRad(360));
@@ -225,7 +234,6 @@ export default class Brunnen extends THREE.Group {
     eimerGriff.castShadow = true;
     hollowEimer.state = {
       eimerDown: false,
-      eimerUp: true
     };
     hollowEimer.add(eimerGriff);
 
@@ -235,13 +243,33 @@ export default class Brunnen extends THREE.Group {
 
     //Eimer Animation
     //-------------------------------------------------------
-    const eimerAnimation = new Animation(hollowEimer, AnimationType.TRANSLATION, AnimationAxis.Y);
+    const eimerAnimation = new Animation(eimerSeil, AnimationType.TRANSLATION, AnimationAxis.Y);
     eimerAnimation.setAmount(-18);
     eimerAnimation.setSpeed(9);
     eimerAnimation.onComplete(this.updateFunctionalState.bind(this));
-    hollowEimer.linearAnimation = eimerAnimation;
+    eimerSeil.linearAnimation = eimerAnimation;
     this.animations.push(eimerAnimation);
 
+    hollowEimer.tweenMoveEimer = new TWEEN.Tween(hollowEimer.position).to(new THREE.Vector3(
+        hollowEimer.position.x,
+        hollowEimer.position.y + 10,
+        hollowEimer.position.z + 50),
+        2000).easing(TWEEN.Easing.Quartic.InOut).onComplete(this.updateFunctionalState.bind(this));
+    hollowEimer.tweenMoveEimerBack = new TWEEN.Tween(hollowEimer.position).to(new THREE.Vector3(
+            hollowEimer.position.x,
+            hollowEimer.position.y,
+            hollowEimer.position.z),
+        2000).easing(TWEEN.Easing.Quartic.InOut).onComplete(this.updateFunctionalState.bind(this));
+    hollowEimer.tweenTiltEimerDown = new TWEEN.Tween(hollowEimer.rotation).to(new THREE.Vector3(
+            hollowEimer.rotation.x + THREE.MathUtils.degToRad(120),
+            hollowEimer.rotation.y,
+            hollowEimer.rotation.z),
+        2000).easing(TWEEN.Easing.Exponential.Out).onComplete(this.updateFunctionalState.bind(this));
+    hollowEimer.tweenTiltEimerUp = new TWEEN.Tween(hollowEimer.rotation).to(new THREE.Vector3(
+            hollowEimer.rotation.x ,
+            hollowEimer.rotation.y,
+            hollowEimer.rotation.z),
+        2000).easing(TWEEN.Easing.Exponential.Out).onComplete(this.updateFunctionalState.bind(this));
 
     //Griff
     //------------------------------------------------------
@@ -256,7 +284,7 @@ export default class Brunnen extends THREE.Group {
     stab.children[0].position.set(-3, 43, 8);
     stab.children[0].rotation.set(0, THREE.MathUtils.degToRad(-20), 0);
     stab.children[1].position.set(-7.5,48,20);
-    stab.name = 'griff';
+    //stab.name = 'griff';
     stab.children[0].name = 'griff';
     stab.children[1].name = 'griff';
     stab.castShadow = true;
@@ -307,7 +335,7 @@ export default class Brunnen extends THREE.Group {
     const waterBrunnenGeometry = new CircleGeometry(27.5);
     const waterBrunnen = new THREE.Mesh(waterBrunnenGeometry, waterMaterial);
     waterBrunnen.rotation.set(THREE.MathUtils.degToRad(-90),0,0);
-    waterBrunnen.position.set(0,20,0);
+    waterBrunnen.position.set(0,21,0);
 
     this.add(waterBrunnen);
 
@@ -382,23 +410,19 @@ export default class Brunnen extends THREE.Group {
     seil12.castShadow =true;
     stab.add(seil12);
 
-    const eimerSeilGeometry = new THREE.CylinderGeometry(1.2, 1.2, 40);
-    const eimerSeil = new THREE.Mesh(eimerSeilGeometry, seilMaterial);
-    eimerSeil.position.set(0, 33.5, 0);
-    eimerSeil.castShadow =true;
-    hollowEimer.add(eimerSeil);
+
 
     }
 
   updateFunctionalState() {
     const griffRotation = THREE.MathUtils.radToDeg(this.children[4].rotation.x) === 360;
-
+    const eimerTilt = THREE.MathUtils.radToDeg(this.children[3].children[0].rotation.x) > 116;
 
     if(griffRotation){
-      this.children[3].children[1].visible = true;
-      //his.children[3].children[1].state = true;
-
-
+      this.children[3].children[0].children[1].visible = true;
+    }
+    if(eimerTilt){
+      this.children[3].children[0].children[1].visible = false;
     }
 
   }
