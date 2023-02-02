@@ -69,6 +69,7 @@ function main() {
   const tree = new Tree(1);
   tree.position.set(-200,75,-120);
   tree.addPhysics(1);
+  tree.addSound();
   window.scene.add(tree);
 
   const tree2 = new Tree(1.5);

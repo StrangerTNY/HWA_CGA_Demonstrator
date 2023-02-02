@@ -7,12 +7,23 @@ export default class Brunnen extends THREE.Group {
 
   constructor() {
     super();
-
+    const sound = new THREE.PositionalAudio(window.audioListener);
     this.animations = [];
-    this.addParts();
+    this.addParts(sound);
   }
 
-  addParts() {
+  addParts(sound) {
+
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load('src/sounds/water splash.wav', function (buffer) {
+      sound.setBuffer(buffer);
+      sound.setRefDistance(20);
+      sound.setVolume(0.5);
+      //console.log("played sound");
+      sound.play();
+    });
+    this.add(sound);
+
 
     const loader = new THREE.TextureLoader();
 

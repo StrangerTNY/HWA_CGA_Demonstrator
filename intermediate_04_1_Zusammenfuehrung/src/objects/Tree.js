@@ -21,7 +21,7 @@ export default class Tree extends THREE.Group{
     treeTrunk.castShadow = true;
 
     // Krone
-    const treeTopGeometry = new THREE.SphereGeometry(50,16,16);
+    const treeTopGeometry = new THREE.SphereGeometry(50*scale,16,16);
     const treeTopMaterial = new THREE.MeshStandardMaterial({color:0xFFFFFF, wireframe:false});
 
     const topMap = loader.load('src/images/Tree Top_COLOR_0.png');
@@ -57,8 +57,19 @@ export default class Tree extends THREE.Group{
     } else {
       window.physics.addCylinderSphereCompound(this,1000,9*scale,12*scale,150*scale,16,
           0,5*scale,0,
-          50,0,50*scale,0);
+          50*scale,0,50*scale,0);
     }
   }
-
+  addSound(){
+    const sound = new THREE.PositionalAudio(window.audioListener);
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load('src/sounds/birds.wav', function (buffer) {
+      sound.setBuffer(buffer);
+      sound.setRefDistance(20);
+      sound.setVolume(0.5);
+      sound.setLoop(true);
+      sound.play();
+    });
+    this.add(sound);
+  }
 }
