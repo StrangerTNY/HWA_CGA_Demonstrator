@@ -57,42 +57,58 @@ export function executeRaycast(event) {
         }
 
       }
-    } else if ((firstHit.name === 'Mechanik_2' || firstHit.name === 'Mechanik_3') ) {
-
-      if (!firstHit.parentBrunnen.state.hasWater) {
+    } else if ((firstHit.name === 'Mechanik_2' || firstHit.name === 'Mechanik_3') && !firstHit.parentBrunnen.state.hasWater ) {
+      firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
+      if (firstHit.parentBrunnen.state.eimerDown) {
+        firstHit.parentBrunnen.animations.get('EmtpyWater').stop();
+        firstHit.parentBrunnen.animations.get('EmptyEimeBack').stop();
         firstHit.parentBrunnen.animations.get('EimerUp').stop();
         firstHit.parentBrunnen.animations.get('MechanikUp').stop();
         firstHit.parentBrunnen.animations.get('RopeUp').stop();
         firstHit.parentBrunnen.animations.get('WaterAction').stop();
+        firstHit.parentBrunnen.animations.get('EmptyEimer').stop();
+
+
         firstHit.parentBrunnen.animations.get('EimerDown').play();
         firstHit.parentBrunnen.animations.get('RopeDown').play();
         firstHit.parentBrunnen.animations.get('MechnikDown').play();
-        firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
-        firstHit.parentBrunnen.state.hasWater = !firstHit.parentBrunnen.state.hasWater;
-
-      } else if(firstHit.parentBrunnen.state.eimerDown) {
+      } else {
+        firstHit.parentBrunnen.animations.get('EmtpyWater').stop();
         firstHit.parentBrunnen.animations.get('EimerDown').stop();
         firstHit.parentBrunnen.animations.get('MechnikDown').stop();
         firstHit.parentBrunnen.animations.get('RopeDown').stop();
+        firstHit.parentBrunnen.animations.get('EmptyEimer').stop();
+        firstHit.parentBrunnen.animations.get('EmptyEimeBack').stop();
+
+
         firstHit.parentBrunnen.animations.get('EimerUp').play();
         firstHit.parentBrunnen.animations.get('RopeUp').play();
         firstHit.parentBrunnen.animations.get('WaterAction').play();
         firstHit.parentBrunnen.animations.get('MechanikUp').play();
-        firstHit.parentBrunnen.state.eimerDown = !firstHit.parentBrunnen.state.eimerDown;
-
-
+        firstHit.parentBrunnen.state.hasWater = !firstHit.parentBrunnen.state.hasWater;
       }
     }else if(firstHit.name === 'Eimer_2'){
 
       if(firstHit.parentBrunnen.state.hasWater){
-        firstHit.parentBrunnen.animations.get('EmptyEimerBack').stop();
-        firstHit.parentBrunen.animations.get('EmptyEimer').play();
+        firstHit.parentBrunnen.animations.get('EimerDown').stop();
+        firstHit.parentBrunnen.animations.get('RopeDown').stop();
+        firstHit.parentBrunnen.animations.get('MechnikDown').stop();
+        firstHit.parentBrunnen.animations.get('EimerUp').stop();
+        firstHit.parentBrunnen.animations.get('RopeUp').stop();
         firstHit.parentBrunnen.animations.get('WaterAction').stop();
-        setTimeout(() =>{
+        firstHit.parentBrunnen.animations.get('MechanikUp').stop();
+        firstHit.parentBrunnen.animations.get('EmptyEimeBack').stop();
 
+        firstHit.parentBrunnen.animations.get('EmptyEimer').play();
+        firstHit.parentBrunnen.animations.get('EmtpyWater').play();
+
+        setTimeout(() =>{
+          firstHit.parentBrunnen.animations.get('WaterAction').stop();
+          firstHit.parentBrunnen.animations.get('EmtpyWater').stop();
           firstHit.parentBrunnen.animations.get('EmptyEimer').stop();
-          firstHit.parentBrunen.animations.get('EmptyEimerBack').play();
-        },500);
+
+          firstHit.parentBrunnen.animations.get('EmptyEimeBack').play();
+        },6000);
         firstHit.parentBrunnen.state.hasWater = !firstHit.parentBrunnen.state.hasWater;
       }
     }
