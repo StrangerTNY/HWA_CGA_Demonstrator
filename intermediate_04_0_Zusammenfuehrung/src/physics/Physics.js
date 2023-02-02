@@ -173,7 +173,6 @@ export default class Physics {
 
     const offset = new CANNON.Vec3(offsetX, offsetY, offsetZ);
 
-
     const body = new CANNON.Body({mass: mass});
     body.addShape(new CANNON.Sphere(radius),offset);
 

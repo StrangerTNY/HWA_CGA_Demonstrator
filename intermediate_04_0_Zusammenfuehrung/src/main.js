@@ -53,13 +53,14 @@ function main() {
 
   const brunnen = new Brunnen();
   brunnen.position.set(-50,20,0);
+  //brunnen.addSound();
   window.scene.add(brunnen);
 
-  const brunnenFromFile = new BrunnenFromFile();
+  /*const brunnenFromFile = new BrunnenFromFile();
   brunnenFromFile.position.set(50,10,0);
   brunnenFromFile.rotation.set(0, THREE.MathUtils.degToRad(-90), 0);
   //brunnenFromFile.addPhysics();
-  window.scene.add(brunnenFromFile);
+  window.scene.add(brunnenFromFile);*/
 
   const ground = new Ground();
   ground.position.set(0,-26,0);
@@ -127,9 +128,9 @@ function main() {
 
     TWEEN.update();
 
-    if(brunnenFromFile.animationMixer !== null){
+    /*if(brunnenFromFile.animationMixer !== null){
       brunnenFromFile.animationMixer.update(delta);
-    }
+    }*/
 
     window.physics.update(delta);
 

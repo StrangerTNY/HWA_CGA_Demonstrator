@@ -379,11 +379,23 @@ export default class Brunnen extends THREE.Group {
 
   updateFunctionalState() {
     const griffRotation = THREE.MathUtils.radToDeg(this.children[5].rotation.x) === 360;
-
+      //this.addSound();
     if(griffRotation){
       this.children[3].children[1].visible = true;
     }
 
+  }
+  addSound(){
+    const sound = new THREE.PositionalAudio(window.audioListener);
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load('src/sounds/water splash.wav', function (buffer) {
+      sound.setBuffer(buffer);
+      sound.setRefDistance(20);
+      sound.setVolume(0.5);
+      //console.log("played sound");
+      sound.play();
+    });
+    this.add(sound);
   }
 
 }

@@ -15,6 +15,8 @@ export function executeRaycast(event) {
 
     if(firstHit.name === 'griff') {
       if (firstHit.children.length > 0) {
+        /*firstHit.parentBrunnen.sound.play();
+        console.log("i do");*/
         firstHit.linearAnimation.toggleEndPosition();
         firstHit.parent.children[3].linearAnimation.toggleEndPosition();
       } else {

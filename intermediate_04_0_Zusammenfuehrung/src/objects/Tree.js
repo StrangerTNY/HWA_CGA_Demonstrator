@@ -60,5 +60,4 @@ export default class Tree extends THREE.Group{
           50*scale,0,50*scale,0);
     }
   }
-
 }
