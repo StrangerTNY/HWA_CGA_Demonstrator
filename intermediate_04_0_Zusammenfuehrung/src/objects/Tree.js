@@ -49,9 +49,7 @@ export default class Tree extends THREE.Group{
     treeTrunk.scale.set(scale,scale,scale);
 
     this.add(treeTrunk,treeTop);
-  }
-
-  addPhysics(scale = 1) {
+  }  addPhysics(scale = 1) {
     if (this.loadingDone === false) {
       window.setTimeout(this.addPhysics.bind(this), 100);
     } else {
@@ -59,5 +57,17 @@ export default class Tree extends THREE.Group{
           0,5*scale,0,
           50*scale,0,50*scale,0);
     }
+  }
+  addSound(){
+    const sound = new THREE.PositionalAudio(window.audioListener);
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load('src/sounds/birds.wav', function (buffer) {
+      sound.setBuffer(buffer);
+      sound.setRefDistance(20);
+      sound.setVolume(0.5);
+      sound.setLoop(true);
+      sound.play();
+    });
+    this.add(sound);
   }
 }
